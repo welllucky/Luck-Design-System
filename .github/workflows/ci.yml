@@ -67,7 +67,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          file: apps/storybook/Dockerfile
+          file: Dockerfile
           push: false
           tags: luck-storybook:ci
           cache-from: type=gha

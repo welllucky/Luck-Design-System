@@ -80,7 +80,7 @@ pnpm dev              # recompila o core em modo watch
 A imagem constrói o Storybook e o serve como site estático com nginx sem root, na porta 8080. O contexto de build é a raiz do monorepo.
 
 ```sh
-docker build -f apps/storybook/Dockerfile -t luck-storybook .
+docker build -t luck-storybook .
 docker run --rm -p 8080:8080 luck-storybook
 ```
 

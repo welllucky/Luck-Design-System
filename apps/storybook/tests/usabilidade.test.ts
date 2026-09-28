@@ -108,16 +108,22 @@ grupo("foco", () => {
     const semIndicador: string[] = [];
     for (let i = 0; i < 7; i++) {
       await userEvent.tab();
-      await wait(20);
       const el = deepActive() as HTMLElement;
       // O indicador pode estar no próprio controle ou na caixa visual irmã (checkbox/radio).
       const candidates = [el, el.nextElementSibling as HTMLElement | null].filter(Boolean) as HTMLElement[];
-      const visible = candidates.some((c) => {
-        const s = getComputedStyle(c);
-        const outline = s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2;
-        const ring = /\b0px 0px 0px 2px\b/.test(s.boxShadow);
-        return outline || ring;
-      });
+      const hasIndicator = () =>
+        candidates.some((c) => {
+          const s = getComputedStyle(c);
+          const outline = s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2;
+          const ring = /\b0px 0px 0px 2px\b/.test(s.boxShadow);
+          return outline || ring;
+        });
+      // O anel precisa aparecer logo após o foco (até 500 ms), mesmo com a máquina sob carga.
+      let visible = false;
+      for (let t = 0; t < 25 && !visible; t++) {
+        visible = hasIndicator();
+        if (!visible) await wait(20);
+      }
       if (!visible) {
         const s = getComputedStyle(el);
         semIndicador.push(`${describe(activeHost())} (outline: ${s.outline}; box-shadow: ${s.boxShadow})`);

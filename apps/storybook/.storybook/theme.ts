@@ -4,7 +4,7 @@ export default create({
   base: "dark",
   brandTitle: "Luck · Design system WL3",
   brandImage: "./wl3-horizontal-dark.svg",
-  brandUrl: "https://github.com/welllucky/luck",
+  brandUrl: "https://github.com/welllucky/Luck-Design-System",
   brandTarget: "_self",
   colorPrimary: "#F5B301",
   colorSecondary: "#F5B301",

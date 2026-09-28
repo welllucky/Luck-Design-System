@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 # Storybook do Luck como site estático: build com Node + pnpm, servido por nginx sem root.
 #
-#   docker build -f apps/storybook/Dockerfile -t luck-storybook .
+#   docker build -t luck-storybook .
 #   docker run --rm -p 8080:8080 luck-storybook
 #
 # O contexto de build é a RAIZ do monorepo (o Storybook depende de tokens, styles e core).
@@ -53,7 +53,7 @@ FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS runtime
 
 LABEL org.opencontainers.image.title="Luck - Design System" \
       org.opencontainers.image.description="Documentação visual do Luck, o design system do ecossistema WL3" \
-      org.opencontainers.image.source="https://github.com/welllucky/luck-design-system" \
+      org.opencontainers.image.source="https://github.com/welllucky/Luck-Design-System"
 
 COPY apps/storybook/docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build --chown=nginx:nginx /repo/apps/storybook/storybook-static /usr/share/nginx/html
