@@ -34,3 +34,6 @@ packages/core/custom-elements.json
 .nx/polygraph
 .nx/self-healing
 .nx/migrate-runs
+
+# Criado sob demanda pela CI para autenticar no GitHub Packages; nunca deve levar token de verdade
+.npmrc
