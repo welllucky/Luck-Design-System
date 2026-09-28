@@ -1,0 +1,27 @@
+# Só o necessário para o build do Storybook entra no contexto.
+**/node_modules
+**/dist
+**/loader
+**/www
+**/.stencil
+**/storybook-static
+**/__screenshots__
+**/.vitest-attachments
+**/*.tsbuildinfo
+**/coverage
+
+# Gerados pelo build do core (recriados dentro da imagem)
+packages/react/src/generated
+packages/angular/src/generated
+packages/vue/src/generated
+packages/core/custom-elements.json
+
+.git
+.github
+.changeset
+.claude
+.remember
+.vscode
+.idea
+*.log
+.env*

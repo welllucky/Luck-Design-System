@@ -75,6 +75,20 @@ pnpm dev              # recompila o core em modo watch
 - Tokens mudam só em `packages/tokens/src/index.ts`.
 - Mudanças publicáveis precisam de changeset: `pnpm changeset`.
 
+### Deploy do Storybook (Docker)
+
+A imagem constrói o Storybook e o serve como site estático com nginx sem root, na porta 8080. O contexto de build é a raiz do monorepo.
+
+```sh
+docker build -f apps/storybook/Dockerfile -t luck-storybook .
+docker run --rm -p 8080:8080 luck-storybook
+```
+
+- Healthcheck em `/healthz`.
+- `assets/` com cache imutável de 1 ano; HTML e JSON com `no-cache`, então cada deploy aparece na hora.
+- ~95 MB. Funciona em qualquer host de contêiner (Fly.io, Railway, Cloud Run, VPS com Docker/Coolify).
+- A CI constrói a imagem a cada push (sem publicar).
+
 ### Cadeia de suprimentos
 
 `pnpm-workspace.yaml` bloqueia dependências de fontes exóticas, rebaixamento de confiança (`trustPolicy: no-downgrade`) e versões publicadas há menos de 7 dias (`minimumReleaseAge`). Para atualizar uma dependência para uma versão recém-lançada, espere a janela ou justifique uma exceção explícita no arquivo.

@@ -54,3 +54,21 @@ jobs:
           name: storybook-static
           path: apps/storybook/storybook-static
           retention-days: 14
+
+  docker:
+    # Garante que a imagem de deploy do Storybook continua construindo.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/storybook/Dockerfile
+          push: false
+          tags: luck-storybook:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
