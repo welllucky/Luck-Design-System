@@ -45,7 +45,9 @@ jobs:
           publish: pnpm release
           title: "chore: versionar pacotes"
           commit: "chore: versionar pacotes"
-          createGithubReleases: true
+          # As tags são enviadas pelo script `release`: o changesets/action@v1 não reconhece a
+          # saída do Changesets 3 e, sozinho, não publicaria tags nem releases.
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
