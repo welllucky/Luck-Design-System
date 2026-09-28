@@ -41,7 +41,7 @@ export const Tag: Story = {
 export const Avatar: Story = {
   render: () => html`
     <div class="sb-row">
-      <luck-avatar name="Wellington Braga" src="/assets/images/wellington-braga-face.png" size="56" status></luck-avatar>
+      <luck-avatar name="Wellington Braga" src="./wellington-braga-face.png" size="56" status></luck-avatar>
       <luck-avatar name="Wellington Braga" size="40"></luck-avatar>
       <luck-avatar name="Ana Lima" size="32"></luck-avatar>
     </div>

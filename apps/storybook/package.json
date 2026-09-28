@@ -9,7 +9,6 @@
     "build": "storybook build -o storybook-static"
   },
   "dependencies": {
-    "@luck/assets": "workspace:*",
     "@luck/core": "workspace:*",
     "@luck/styles": "workspace:*",
     "@luck/tokens": "workspace:*",

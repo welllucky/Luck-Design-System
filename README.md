@@ -14,7 +14,6 @@ A linguagem é a releitura **V4 · Tátil**: botões são teclas que afundam, ca
 | [`@luck/react`](packages/react) | Componentes React gerados (`<LuckButton onLuckChange>`) |
 | [`@luck/angular`](packages/angular) | Componentes standalone + adaptadores `ngModel` / Reactive Forms |
 | [`@luck/vue`](packages/vue) | Componentes Vue 3 com `v-model` |
-| [`@luck/assets`](packages/assets) | Logo Ritmo (SVG/PNG), favicons, ícones de app e imagens |
 | [`apps/storybook`](apps/storybook) | Documentação: fundamentos, componentes e uso nos frameworks |
 
 `@luck/core`, `@luck/react`, `@luck/angular` e `@luck/vue` são versionados juntos: os adaptadores são gerados a partir da API do core.

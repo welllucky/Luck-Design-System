@@ -3,8 +3,8 @@ import { create } from "storybook/theming/create";
 export default create({
   base: "dark",
   brandTitle: "Luck · Design system WL3",
+  brandImage: "./wl3-horizontal-dark.svg",
   brandUrl: "https://github.com/welllucky/luck",
-  brandImage: "/assets/logo/svg/horizontal/wl3-horizontal-dark.svg",
   brandTarget: "_self",
   colorPrimary: "#F5B301",
   colorSecondary: "#F5B301",

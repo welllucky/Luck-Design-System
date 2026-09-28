@@ -11,9 +11,9 @@
       "!!**/dist",
       "!!**/generated",
       "!!**/components.d.ts",
-      "!!packages/assets",
       "!!packages/core/custom-elements.json",
-      "!!**/readme.md"
+      "!!**/readme.md",
+      "!!apps/storybook/public"
     ]
   },
   "formatter": {

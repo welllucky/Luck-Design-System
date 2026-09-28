@@ -25,7 +25,7 @@ export const ProjectCard: Story = {
         tags='["Angular","Firebase","UX"]'
         company="WL3"
         period="2024 — hoje"
-        image="/assets/images/faca-a-lista.svg"
+        image="./faca-a-lista.svg"
       ></luck-project-card>
     </div>
   `,
