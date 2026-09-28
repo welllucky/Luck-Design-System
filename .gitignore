@@ -24,3 +24,7 @@ packages/vue/src/generated/
 
 # Gerado pelo build do core
 packages/core/custom-elements.json
+
+# Artefatos de falha da Vitest em modo navegador
+**/__screenshots__/
+**/.vitest-attachments/
