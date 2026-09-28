@@ -51,9 +51,9 @@ RUN pnpm build:core \
 # ---------- runtime ----------
 FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS runtime
 
-LABEL org.opencontainers.image.title="Luck · Storybook" \
+LABEL org.opencontainers.image.title="Luck - Design System" \
       org.opencontainers.image.description="Documentação visual do Luck, o design system do ecossistema WL3" \
-      org.opencontainers.image.source="https://github.com/welllucky/luck"
+      org.opencontainers.image.source="https://github.com/welllucky/luck-design-system" \
 
 COPY apps/storybook/docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build --chown=nginx:nginx /repo/apps/storybook/storybook-static /usr/share/nginx/html
