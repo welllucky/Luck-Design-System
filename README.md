@@ -73,7 +73,7 @@ pnpm dev              # recompila o core em modo watch
 
 - **Não edite** `packages/*/src/generated/`, `packages/core/src/components.d.ts` nem os `readme.md` dos componentes: são gerados pelo `stencil build`. A CI falha se estiverem desatualizados.
 - Tokens mudam só em `packages/tokens/src/index.ts`.
-- Mudanças publicáveis precisam de changeset: `pnpm changeset`.
+- Commits seguem [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `feat!:`/`BREAKING CHANGE:`…): é deles que o `nx release` deriva a versão de cada pacote. Veja **Publicação**.
 
 ### Deploy do Storybook (Docker)
 
@@ -97,13 +97,18 @@ docker run --rm -p 8080:8080 luck-storybook
 
 Os pacotes são publicados no **GitHub Packages** (registro npm do GitHub), com a mesma visibilidade privada do repositório.
 
-O fluxo é o do [Changesets](https://github.com/changesets/changesets):
+O versionamento é do [Nx Release](https://nx.dev/features/manage-releases), a partir de **Conventional Commits** — sem changeset manual. A cada push na `main`, o workflow **Release**:
 
-1. Toda mudança publicável vem com um changeset: `pnpm changeset` (escolha os pacotes e o tipo: patch, minor ou major).
-2. No merge na `main`, o workflow **Release** abre o PR `chore: versionar pacotes`, que sobe as versões e escreve os CHANGELOGs.
-3. No merge desse PR, o mesmo workflow publica as novas versões, cria as tags e as releases do GitHub.
+1. Olha, por pacote, os commits desde a última tag (`fix:` → patch, `feat:` → minor, `feat!:`/rodapé `BREAKING CHANGE:` → major). Commit que não toca arquivos do pacote não conta.
+2. Sem nada relevante, não faz nada. Havendo mudança, builda, escreve o `CHANGELOG.md` do pacote, cria o commit `chore(release): publica <pacote> <versão>` com as tags, publica no GitHub Packages e cria a GitHub Release.
 
-`@welllucky/luck-core`, `luck-react`, `luck-angular` e `luck-vue` sempre sobem juntos. O `luck-angular` é publicado a partir de `packages/angular/dist`.
+`@welllucky/luck-core`, `luck-react`, `luck-angular` e `luck-vue` formam um **grupo fixo** (`nx.json` → `release.groups.core`): sobem sempre juntos, na maior versão exigida por qualquer um deles. `luck-tokens` e `luck-styles` versionam de forma independente. O `luck-angular` é publicado a partir de `packages/angular/dist`.
+
+Local, antes de decidir o quê vai mudar de versão:
+
+```sh
+pnpm release:dry   # nx release --dry-run — mostra o que seria versionado/publicado, sem alterar nada
+```
 
 ## Instalação nos apps
 

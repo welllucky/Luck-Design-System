@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "release": {
+    "version": {
+      "conventionalCommits": true,
+      "preVersionCommand": "pnpm build"
+    },
+    "changelog": {
+      "workspaceChangelog": false,
+      "projectChangelogs": {
+        "createRelease": "github"
+      }
+    },
+    "git": {
+      "commit": true,
+      "commitMessage": "chore(release): publica {projectName} {version}",
+      "tag": true,
+      "push": true
+    },
+    "groups": {
+      "core": {
+        "projects": ["@welllucky/luck-core", "@welllucky/luck-react", "@welllucky/luck-angular", "@welllucky/luck-vue"],
+        "projectsRelationship": "fixed"
+      },
+      "tokens": {
+        "projects": ["@welllucky/luck-tokens"],
+        "projectsRelationship": "independent"
+      },
+      "styles": {
+        "projects": ["@welllucky/luck-styles"],
+        "projectsRelationship": "independent"
+      }
+    },
+    "releaseTag": {
+      "pattern": "{projectName}@{version}"
+    }
+  }
+}

@@ -28,3 +28,9 @@ packages/core/custom-elements.json
 # Artefatos de falha da Vitest em modo navegador
 **/__screenshots__/
 **/.vitest-attachments/
+
+.nx/cache
+.nx/workspace-data
+.nx/polygraph
+.nx/self-healing
+.nx/migrate-runs

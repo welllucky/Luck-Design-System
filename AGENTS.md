@@ -38,6 +38,16 @@ Dicas:
 
 O pre-commit (lefthook) roda `pnpm test` completo (~20 s): build do core, unitários, histórias e usabilidade.
 
+## Commits e release
+
+O versionamento é automático (Nx Release, `nx.json`): **a mensagem do commit decide a versão publicada**, não há changeset manual. Use [Conventional Commits](https://www.conventionalcommits.org/) sempre que o commit tocar `packages/*`:
+
+- `fix: ...` → patch. `feat: ...` → minor. `feat!: ...` ou rodapé `BREAKING CHANGE: ...` → major.
+- Um commit que não muda nenhum arquivo dentro de um pacote não afeta a versão dele — `chore:`/`docs:`/`test:`/`ci:` em arquivos de fora de `packages/*` (README, workflows, Storybook) não publica nada.
+- `luck-core`, `luck-react`, `luck-angular` e `luck-vue` formam um grupo fixo: sobem juntos, na maior versão exigida por qualquer um. `luck-tokens` e `luck-styles` são independentes.
+
+Antes de um commit que deveria bater versão, confira com `pnpm release:dry` (`nx release --dry-run`) o que seria versionado/publicado. O workflow **Release** roda isso de verdade a cada push na `main`.
+
 ## Verificação
 
 ```sh

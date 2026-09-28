@@ -1,9 +1,9 @@
 name: Release
 
-# A cada push na main:
-# - com changesets pendentes: abre/atualiza o PR "Versionar pacotes" (bump de versão + CHANGELOG);
-# - sem changesets (ex.: depois do merge desse PR): publica no GitHub Packages as versões que
-#   ainda não existem no registro e cria as tags.
+# A cada push na main: o nx release olha os commits desde a última tag de cada pacote
+# (conventional commits: feat → minor, fix → patch, "BREAKING CHANGE" → major), decide
+# a versão, builda, atualiza CHANGELOGs, cria commit + tags, publica no GitHub Packages
+# e cria as GitHub Releases. Sem nada relevante mudado, o passo termina sem fazer nada.
 on:
   push:
     branches: [main]
@@ -15,7 +15,6 @@ concurrency:
 
 permissions:
   contents: write
-  pull-requests: write
   packages: write
 
 jobs:
@@ -38,16 +37,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Versionar ou publicar
-        uses: changesets/action@v1
-        with:
-          version: pnpm version-packages
-          publish: pnpm release
-          title: "chore: versionar pacotes"
-          commit: "chore: versionar pacotes"
-          # As tags são enviadas pelo script `release`: o changesets/action@v1 não reconhece a
-          # saída do Changesets 3 e, sozinho, não publicaria tags nem releases.
-          createGithubReleases: false
+      - name: Identidade do git para o commit de release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Versionar, publicar e criar as releases
+        run: pnpm exec nx release --yes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

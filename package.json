@@ -18,14 +18,14 @@
     "test:storybook": "pnpm --filter @welllucky/luck-storybook test",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "changeset": "changeset",
-    "version-packages": "changeset version && pnpm install --lockfile-only",
-    "release": "pnpm build && changeset publish && git push origin --tags"
+    "release": "nx release",
+    "release:dry": "nx release --dry-run"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
-    "@changesets/cli": "3.0.3",
+    "@nx/js": "23.2.1",
     "lefthook": "^2.1.14",
+    "nx": "23.2.1",
     "typescript": "~6.0.3"
   }
 }
