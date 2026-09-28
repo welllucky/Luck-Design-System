@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
+import { expect } from "storybook/test";
+import { part, parts, readyAll } from "../support/dom";
 
 type LogoArgs = {
   variant: "symbol" | "horizontal" | "stacked" | "signature" | "wordmark" | "app-icon";
@@ -34,6 +36,17 @@ type Story = StoryObj<LogoArgs>;
 export const Playground: Story = {};
 
 export const Variantes: Story = {
+  play: async ({ canvasElement }) => {
+    const logos = await readyAll<HTMLLuckLogoElement>(canvasElement, "luck-logo");
+    await expect(logos).toHaveLength(6);
+    for (const logo of logos) {
+      await expect(logo).toHaveAttribute("role", "img");
+      await expect(logo).toHaveAccessibleName("welllucky");
+    }
+    await expect(part(logos[3], ".sig__name")).toHaveTextContent("Wellington Braga");
+    // O ³ (terceiro L) é sempre o acento.
+    await expect(parts(logos[0], "path.l")[2]).toHaveAttribute("fill", "var(--logo-accent)");
+  },
   render: () => html`
     <div class="sb-row" style="gap:40px">
       <luck-logo variant="symbol" size="48"></luck-logo>
@@ -95,5 +108,10 @@ export const Icones: StoryObj = {
         )}
       </div>
     `;
+  },
+  play: async ({ canvasElement }) => {
+    const icons = await readyAll<HTMLLuckIconElement>(canvasElement, "luck-icon");
+    // Todo ícone do conjunto padrão precisa desenhar um <svg> (inclusive os de marca).
+    for (const icon of icons) await expect(part(icon, "svg")).toBeInTheDocument();
   },
 };

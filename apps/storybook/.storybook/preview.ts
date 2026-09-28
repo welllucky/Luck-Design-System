@@ -64,7 +64,8 @@ const preview: Preview = {
     backgrounds: { disable: true },
     controls: { expanded: true, sort: "requiredFirst" },
     docs: { theme, codePanel: true },
-    a11y: { test: "todo" },
+    // Violações de acessibilidade (axe) reprovam o teste da história.
+    a11y: { test: "error" },
     options: {
       storySort: {
         order: [

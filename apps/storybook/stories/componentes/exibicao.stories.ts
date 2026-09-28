@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
+import { expect } from "storybook/test";
+import { part, parts, ready, readyAll } from "../support/dom";
 
 const meta: Meta = {
   title: "Componentes/Exibição",
@@ -26,6 +28,12 @@ export const Badge: Story = {
       <luck-badge>Neutro</luck-badge>
     </div>
   `,
+  play: async ({ canvasElement }) => {
+    const [disponivel, empresa] = await readyAll<HTMLLuckBadgeElement>(canvasElement, "luck-badge");
+    await expect(disponivel).toHaveAttribute("tone", "accent");
+    await expect(part(disponivel, ".dot")).toBeInTheDocument();
+    await expect(part(empresa, "luck-icon")).toHaveAttribute("name", "building-2");
+  },
 };
 
 export const Tag: Story = {
@@ -46,6 +54,13 @@ export const Avatar: Story = {
       <luck-avatar name="Ana Lima" size="32"></luck-avatar>
     </div>
   `,
+  play: async ({ canvasElement }) => {
+    const [foto, iniciais] = await readyAll<HTMLLuckAvatarElement>(canvasElement, "luck-avatar");
+    await expect(part(foto, "img")).toHaveAttribute("alt", "Wellington Braga");
+    await expect(part(foto, "[role=status]")).toHaveAccessibleName("Disponível");
+    await expect(part(iniciais, "[role=img]")).toHaveTextContent("WB");
+    await expect(part(iniciais, "[role=img]")).toHaveAccessibleName("Wellington Braga");
+  },
 };
 
 export const Card: Story = {
@@ -69,4 +84,11 @@ export const Card: Story = {
       </luck-card>
     </div>
   `,
+  play: async ({ canvasElement }) => {
+    const [comBarra, , semBarra] = await readyAll<HTMLLuckCardElement>(canvasElement, "luck-card");
+    await expect(part(comBarra, ".bar b")).toHaveTextContent("01");
+    await expect(part(comBarra, ".bar small")).toHaveTextContent("3 itens");
+    await expect(parts(semBarra, ".bar")).toHaveLength(0);
+    await ready(canvasElement, "luck-card[tilt]");
+  },
 };

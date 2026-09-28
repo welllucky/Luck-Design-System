@@ -7,10 +7,11 @@
 
 /** Paleta crua. Âmbar é o único acento de interface; azul sinaliza empresas; roxo, conhecimentos. */
 export const palette = {
-  amber: { 300: "#FFCB3D", 400: "#F5B301", 600: "#C08A00", 700: "#A87A00", 800: "#8A5A00", ink: "#1C1300" },
-  blue: { 400: "#4DB2FF", 500: "#0D98FF", 700: "#126EB3" },
-  purple: { 400: "#B46CFF", 500: "#850DFF", 700: "#6112B3" },
-  red: { 400: "#FF7A66", 700: "#B42318" },
+  // Tons ajustados para WCAG AA (4.5:1) também sobre os fundos tingidos de badges: amber-800, blue-700, red-700, purple-400.
+  amber: { 300: "#FFCB3D", 400: "#F5B301", 600: "#C08A00", 700: "#A87A00", 800: "#7E5200", ink: "#1C1300" },
+  blue: { 400: "#4DB2FF", 500: "#0D98FF", 700: "#0F5F9A" },
+  purple: { 400: "#BB7AFF", 500: "#850DFF", 700: "#6112B3" },
+  red: { 400: "#FF7A66", 700: "#AF2217" },
   ink: {
     950: "#0C0C0B",
     900: "#111110",
@@ -18,7 +19,7 @@ export const palette = {
     800: "#1A1A18",
     750: "#222220",
     700: "#2C2C29",
-    500: "#6A6A65",
+    500: "#898985", // AA (4.5:1) sobre bg, well e superfícies 1–2
     400: "#9C9C98",
     50: "#F4F4F2",
   },
@@ -27,7 +28,7 @@ export const palette = {
     50: "#F6F5F1",
     100: "#EDECE7",
     200: "#E6E5DF",
-    400: "#8F8F89",
+    400: "#676763", // AA (4.5:1) sobre bg, well e superfícies
     600: "#5F5F5A",
     950: "#131312",
   },

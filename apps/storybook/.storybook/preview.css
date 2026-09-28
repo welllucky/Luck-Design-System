@@ -25,3 +25,35 @@ body,
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--gap-grid);
 }
+
+/* Tabelas das páginas de documentação com os tokens do Luck (o padrão do Storybook usa azul-acinzentado). */
+.sbdocs table {
+  border-collapse: collapse;
+}
+
+.sbdocs table tr,
+.sbdocs table tr:nth-of-type(2n) {
+  background: transparent;
+  border-top: 1px solid var(--border);
+}
+
+.sbdocs table tr:nth-of-type(2n) {
+  background: var(--surface-2);
+}
+
+.sbdocs table th,
+.sbdocs table td {
+  border: 1px solid var(--border);
+  color: var(--fg);
+  text-align: left;
+}
+
+.sbdocs table th {
+  background: var(--surface-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}

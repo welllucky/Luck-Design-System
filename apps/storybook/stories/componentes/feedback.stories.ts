@@ -1,6 +1,8 @@
 import { showToast } from "@luck/core/components";
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
+import { expect, userEvent, waitFor } from "storybook/test";
+import { listen, part, ready, readyAll } from "../support/dom";
 
 const meta: Meta = {
   title: "Componentes/Feedback",
@@ -29,6 +31,30 @@ export const Toast: Story = {
       >
     </div>
   `,
+  play: async ({ canvasElement, step }) => {
+    const [ok, erro] = await readyAll<HTMLLuckToastElement>(canvasElement, "luck-toast");
+
+    await step("tom de erro usa role=alert; os demais, role=status", async () => {
+      await expect(ok).toHaveAttribute("role", "status");
+      await expect(erro).toHaveAttribute("role", "alert");
+    });
+    await step("× fecha com animação e emite luckClose", async () => {
+      const closed = listen(ok, "luckClose");
+      await userEvent.click(part(ok, "button.close"));
+      await waitFor(() => expect(closed).toHaveLength(1), { timeout: 2000 });
+    });
+    await step("showToast empilha um aviso na região viva", async () => {
+      const trigger = await ready<HTMLLuckButtonElement>(canvasElement, "luck-button");
+      await userEvent.click(part(trigger, "button"));
+      const region = await waitFor(() => {
+        const r = document.getElementById("luck-toast-region");
+        if (!r?.querySelector("luck-toast")) throw new Error("sem aviso");
+        return r;
+      });
+      await expect(region).toHaveAttribute("aria-live", "polite");
+      region.remove();
+    });
+  },
 };
 
 export const Tooltip: Story = {
@@ -38,6 +64,11 @@ export const Tooltip: Story = {
       <luck-tooltip label="Dica embaixo" side="bottom"><luck-button variant="ghost">Embaixo</luck-button></luck-tooltip>
     </div>
   `,
+  play: async ({ canvasElement }) => {
+    const [top, bottom] = await readyAll<HTMLLuckTooltipElement>(canvasElement, "luck-tooltip");
+    await expect(part(top, "[role=tooltip]")).toHaveTextContent("Dica em cima");
+    await expect(part(bottom, "[role=tooltip]")).toHaveClass("tip--bottom");
+  },
 };
 
 export const Dialog: Story = {
@@ -56,5 +87,32 @@ export const Dialog: Story = {
         <luck-button slot="actions" icon-right="send" @click=${close}>Enviar</luck-button>
       </luck-dialog>
     `;
+  },
+  play: async ({ canvasElement, step }) => {
+    const trigger = await ready<HTMLLuckButtonElement>(canvasElement, "luck-button");
+    const dialog = await ready<HTMLLuckDialogElement>(canvasElement, "luck-dialog");
+    const native = () => part<HTMLDialogElement>(dialog, "dialog");
+
+    await step("abre como modal com nome acessível", async () => {
+      await userEvent.click(part(trigger, "button"));
+      await waitFor(() => expect(native().open).toBe(true));
+      await expect(native()).toHaveAccessibleName("Vamos conversar?");
+    });
+    await step("Esc fecha e informa o motivo", async () => {
+      const closed = listen<{ reason: string }>(dialog, "luckClose");
+      native().dispatchEvent(new Event("cancel", { cancelable: true }));
+      await waitFor(() => expect(dialog.open).toBe(false));
+      await expect(closed.at(-1)?.detail.reason).toBe("escape");
+      await waitFor(() => expect(native().open).toBe(false));
+    });
+    await step("× fecha pelo botão", async () => {
+      await dialog.show();
+      await waitFor(() => expect(native().open).toBe(true));
+      const closed = listen<{ reason: string }>(dialog, "luckClose");
+      const x = part(dialog, "luck-icon-button");
+      await userEvent.click(part(x, "button"));
+      await expect(closed.at(-1)?.detail.reason).toBe("button");
+      await waitFor(() => expect(native().open).toBe(false));
+    });
   },
 };

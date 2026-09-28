@@ -14,6 +14,9 @@ import {
 import { setFormValue, syncValidity } from "../../utils/field";
 import { childrenByTag, cx, parseList } from "../../utils/utils";
 
+/** Valor de uma <option> pela especificação HTML: atributo `value` ou, sem ele, o texto. */
+const optionValue = (o: Element) => o.getAttribute("value") ?? o.textContent?.trim() ?? "";
+
 export type SelectOption = string | { value: string; label: string; disabled?: boolean };
 
 /**
@@ -56,8 +59,13 @@ export class LuckSelect {
   private initial = "";
 
   componentWillLoad() {
-    this.initial = this.value;
     this.readSlotted();
+    // <option selected> filho define o valor inicial quando `value` não foi passado.
+    if (!this.value) {
+      const selected = childrenByTag<HTMLOptionElement>(this.el, "option").find((o) => o.hasAttribute("selected"));
+      if (selected) this.value = optionValue(selected);
+    }
+    this.initial = this.value;
   }
 
   componentDidLoad() {
@@ -66,9 +74,9 @@ export class LuckSelect {
 
   private readSlotted() {
     this.slotted = childrenByTag<HTMLOptionElement>(this.el, "option").map((o) => ({
-      value: (o as HTMLOptionElement).value,
+      value: optionValue(o),
       label: o.textContent ?? "",
-      disabled: (o as HTMLOptionElement).disabled,
+      disabled: o.hasAttribute("disabled"),
     }));
   }
 

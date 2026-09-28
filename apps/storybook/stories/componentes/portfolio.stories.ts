@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
+import { expect, userEvent, waitFor } from "storybook/test";
+import { listen, part, parts, ready, readyAll } from "../support/dom";
 
 const meta: Meta = {
   title: "Portfólio",
@@ -29,6 +31,23 @@ export const ProjectCard: Story = {
       ></luck-project-card>
     </div>
   `,
+  play: async ({ canvasElement, step }) => {
+    const card = await ready<HTMLLuckProjectCardElement>(canvasElement, "luck-project-card");
+
+    await step("mostra título, tags e empresa", async () => {
+      await expect(part(card, "h3")).toHaveTextContent("Faça a Lista");
+      await expect(parts(card, "luck-tag")).toHaveLength(3);
+      await expect(part(card, ".company")).toHaveTextContent("WL3");
+    });
+    await step("luckOpen é cancelável para abrir um diálogo no lugar do link", async () => {
+      const opened = listen<{ href: string }>(card, "luckOpen");
+      card.addEventListener("luckOpen", (e) => e.preventDefault(), { once: true });
+      const before = location.href;
+      await userEvent.click(part(card, "a.link"));
+      await expect(opened).toHaveLength(1);
+      await expect(location.href).toBe(before);
+    });
+  },
 };
 
 export const Timeline: Story = {
@@ -46,6 +65,13 @@ export const Timeline: Story = {
       ])}
     ></luck-timeline>
   `,
+  play: async ({ canvasElement }) => {
+    const timeline = await ready<HTMLLuckTimelineElement>(canvasElement, "luck-timeline");
+    const items = parts(timeline, "li");
+    await expect(items).toHaveLength(3);
+    await expect(items[0]).toHaveClass("is-current");
+    await expect(part(timeline, "ol")).toBeInTheDocument();
+  },
 };
 
 export const SkillList: Story = {
@@ -65,6 +91,29 @@ export const SkillList: Story = {
       ></luck-skill-list>
     </div>
   `,
+  play: async ({ canvasElement, step }) => {
+    const list = await ready<HTMLLuckSkillListElement>(canvasElement, "luck-skill-list");
+    const heads = () => parts<HTMLButtonElement>(list, "button.head");
+
+    await step("primeiro item começa aberto", async () => {
+      await expect(heads()[0]).toHaveAttribute("aria-expanded", "true");
+      await expect(heads()[1]).toHaveAttribute("aria-expanded", "false");
+    });
+    await step("abrir outro fecha o anterior (sanfona)", async () => {
+      await userEvent.click(heads()[1]);
+      await waitFor(() => expect(heads()[1]).toHaveAttribute("aria-expanded", "true"));
+      await expect(heads()[0]).toHaveAttribute("aria-expanded", "false");
+    });
+    await step("clicar no aberto fecha todos", async () => {
+      await userEvent.click(heads()[1]);
+      await waitFor(() => expect(list.open).toBe(-1));
+    });
+    await step("reabrir o primeiro volta ao estado inicial", async () => {
+      await userEvent.click(heads()[0]);
+      // Espera a transição terminar para a auditoria de contraste medir a cor final.
+      await waitFor(() => expect(getComputedStyle(part(list, ".is-open .panel p")).opacity).toBe("1"));
+    });
+  },
 };
 
 export const SocialLinks: Story = {
@@ -81,5 +130,18 @@ export const SocialLinks: Story = {
         <luck-social-links links=${links} variant="button"></luck-social-links>
       </div>
     `;
+  },
+  play: async ({ canvasElement }) => {
+    const [icons, buttons] = await readyAll<HTMLLuckSocialLinksElement>(canvasElement, "luck-social-links");
+    const iconLinks = parts<HTMLLuckIconButtonElement>(icons, "luck-icon-button");
+    await expect(iconLinks).toHaveLength(4);
+    await Promise.all(iconLinks.map((b) => b.componentOnReady?.()));
+    const github = part<HTMLAnchorElement>(iconLinks[0], "a");
+    await expect(github).toHaveAccessibleName("GitHub");
+    await expect(github).toHaveAttribute("target", "_blank");
+    await expect(github).toHaveAttribute("rel", "noreferrer");
+    // E-mail abre no próprio app de correio, sem nova aba.
+    await expect(part(iconLinks[3], "a")).not.toHaveAttribute("target");
+    await expect(parts(buttons, "luck-button")).toHaveLength(4);
   },
 };

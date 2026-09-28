@@ -27,8 +27,8 @@
 
 .track {
   position: relative;
-  width: 40px;
-  height: 22px;
+  width: 42px;
+  height: 24px; /* alvo mínimo de 24 px (WCAG 2.5.8) */
   border-radius: var(--radius-sm);
   border: 0;
   padding: 0;
@@ -43,8 +43,8 @@
   position: absolute;
   left: 2px;
   top: 2px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: var(--radius-xs);
   background: var(--fg-muted);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
@@ -55,7 +55,7 @@
 }
 
 .track:active .thumb {
-  width: 24px;
+  width: 26px;
 }
 
 :host([checked]) .track {
@@ -64,10 +64,10 @@
 }
 
 :host([checked]) .thumb {
-  left: 20px;
+  left: 20px; /* 42 − 20 − 2 */
   background: var(--on-interactive);
 }
 
 :host([checked]) .track:active .thumb {
-  left: 14px;
+  left: 14px; /* 42 − 26 − 2 */
 }

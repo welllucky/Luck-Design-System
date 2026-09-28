@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { expect, fn, userEvent, waitFor } from "storybook/test";
+import { listen, part, ready, readyAll } from "../support/dom";
 
 type ButtonArgs = {
   variant: "primary" | "secondary" | "ghost";
@@ -61,7 +63,24 @@ const meta: Meta<ButtonArgs> = {
 export default meta;
 type Story = StoryObj<ButtonArgs>;
 
-export const Primario: Story = { name: "Primário" };
+export const Primario: Story = {
+  name: "Primário",
+  play: async ({ canvasElement, step }) => {
+    const host = await ready<HTMLLuckButtonElement>(canvasElement, "luck-button");
+    const onClick = fn();
+    host.addEventListener("click", onClick);
+    const btn = part<HTMLButtonElement>(host, "button");
+
+    await step("renderiza um <button> nativo com o rótulo do slot", async () => {
+      await expect(btn).toHaveAttribute("type", "button");
+      await expect(host).toHaveTextContent("Explorar projetos");
+    });
+    await step("clique dispara o evento", async () => {
+      await userEvent.click(btn);
+      await expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  },
+};
 
 export const Variantes: Story = {
   render: () => html`
@@ -92,6 +111,23 @@ export const Estados: Story = {
       <luck-button magnetic icon-right="send">Magnético</luck-button>
     </div>
   `,
+  play: async ({ canvasElement, step }) => {
+    const [loading, success, disabled] = await readyAll<HTMLLuckButtonElement>(canvasElement, "luck-button");
+
+    await step("loading anuncia ocupado e bloqueia o clique", async () => {
+      const onClick = fn();
+      loading.addEventListener("click", onClick);
+      await expect(part(loading, "button")).toHaveAttribute("aria-busy", "true");
+      await userEvent.click(part(loading, "button"));
+      await expect(onClick).not.toHaveBeenCalled();
+    });
+    await step("success mostra o ✓ desenhado", async () => {
+      await expect(part(success, "button")).toHaveClass("is-success");
+    });
+    await step("disabled usa o atributo nativo", async () => {
+      await expect(part(disabled, "button")).toBeDisabled();
+    });
+  },
 };
 
 export const FluxoDeEnvio: Story = {
@@ -106,6 +142,15 @@ export const FluxoDeEnvio: Story = {
       setTimeout(() => (btn.success = false), 1600);
     };
     return html`<luck-button icon-right="send" @click=${send}>Enviar mensagem</luck-button>`;
+  },
+  play: async ({ canvasElement, step }) => {
+    const host = await ready<HTMLLuckButtonElement>(canvasElement, "luck-button");
+    await step("clique → spinner → ✓", async () => {
+      await userEvent.click(part(host, "button"));
+      await waitFor(() => expect(host.loading).toBe(true));
+      await waitFor(() => expect(host.success).toBe(true), { timeout: 3000 });
+      await expect(host.loading).toBe(false);
+    });
   },
 };
 
@@ -122,4 +167,18 @@ export const IconButton: StoryObj = {
       <luck-icon-button icon="x" label="Fechar" variant="ghost" size="sm"></luck-icon-button>
     </div>
   `,
+  play: async ({ canvasElement, step }) => {
+    const [github, copy] = await readyAll<HTMLLuckIconButtonElement>(canvasElement, "luck-icon-button");
+
+    await step("label vira nome acessível", async () => {
+      await expect(part(github, "button")).toHaveAccessibleName("GitHub");
+    });
+    await step("confirm-icon troca o ícone e anuncia a confirmação", async () => {
+      const confirmed = listen(copy, "luckConfirm");
+      await userEvent.click(part(copy, "button"));
+      await waitFor(() => expect(part(copy, "button")).toHaveClass("is-swapped"));
+      await expect(part(copy, "[aria-live]")).toHaveTextContent("E-mail copiado");
+      await expect(confirmed).toHaveLength(1);
+    });
+  },
 };

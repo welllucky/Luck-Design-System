@@ -6,3 +6,8 @@ pre-commit:
     - name: staged-check
       glob: "*.{js,cjs,mjs,jsx,ts,tsx,json,jsonc,css}"
       run: pnpm exec biome check --no-errors-on-unmatched {staged_files}
+    # Todo commit roda a suíte inteira: unitários do core, histórias do Storybook (interação + axe)
+    # e usabilidade (teclado real, foco, alvos de toque, movimento reduzido, reflow, contraste).
+    # Leva ~20 s. Em emergência, `LEFTHOOK_EXCLUDE=tests git commit` pula só este job.
+    - name: tests
+      run: pnpm test

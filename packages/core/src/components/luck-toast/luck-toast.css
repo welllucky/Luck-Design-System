@@ -71,9 +71,16 @@
   background: none;
   cursor: pointer;
   color: var(--fg-faint);
-  padding: 2px;
+  /* Ícone de 14 px com área de toque de 24 px (WCAG 2.5.8), sem mudar o alinhamento visual. */
+  width: 24px;
+  height: 24px;
+  margin: -5px -5px -5px 0;
+  padding: 0;
   border-radius: var(--radius-xs);
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
 }
 
 .close:hover {

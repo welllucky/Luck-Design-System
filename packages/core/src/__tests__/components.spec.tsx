@@ -5,6 +5,7 @@ import { LuckCard } from "../components/luck-card/luck-card";
 import { LuckCheckbox } from "../components/luck-checkbox/luck-checkbox";
 import { LuckIcon } from "../components/luck-icon/luck-icon";
 import { LuckLogo } from "../components/luck-logo/luck-logo";
+import { LuckSelect } from "../components/luck-select/luck-select";
 import { LuckTab } from "../components/luck-tab/luck-tab";
 import { LuckTabs } from "../components/luck-tabs/luck-tabs";
 import { toKebab } from "../icons/registry";
@@ -147,5 +148,27 @@ describe("luck-tabs", () => {
     expect(page.root!.value).toBe("b");
     expect(spy.mock.calls[0][0].detail).toEqual({ value: "b" });
     expect(page.root!.querySelector('luck-tab[value="b"]')!.hasAttribute("active")).toBe(true);
+  });
+});
+
+describe("luck-select", () => {
+  it("usa o <option selected> filho como valor inicial", async () => {
+    const page = await newSpecPage({
+      components: [LuckSelect],
+      html: `<luck-select label="Assunto"><option value="a">A</option><option value="b" selected>B</option></luck-select>`,
+    });
+    // Com filhos <option>, o mock-doc não define page.root; buscamos o host diretamente.
+    const select = page.body.querySelector("luck-select") as HTMLLuckSelectElement;
+    expect(select.value).toBe("b");
+  });
+
+  it("aceita options em JSON e prioriza o value explícito", async () => {
+    const page = await newSpecPage({
+      components: [LuckSelect],
+      html: `<luck-select label="Assunto" options='["X","Y"]' value="Y"></luck-select>`,
+    });
+    const options = page.root!.shadowRoot!.querySelectorAll("option");
+    expect(options.length).toBe(2);
+    expect(page.root!.value).toBe("Y");
   });
 });
