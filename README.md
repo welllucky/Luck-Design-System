@@ -104,11 +104,35 @@ O versionamento é do [Nx Release](https://nx.dev/features/manage-releases), a p
 
 `@welllucky/luck-core`, `luck-react`, `luck-angular` e `luck-vue` formam um **grupo fixo** (`nx.json` → `release.groups.core`): sobem sempre juntos, na maior versão exigida por qualquer um deles. `luck-tokens` e `luck-styles` versionam de forma independente. O `luck-angular` é publicado a partir de `packages/angular/dist`.
 
-Local, antes de decidir o quê vai mudar de versão:
+### Comandos úteis
 
 ```sh
-pnpm release:dry   # nx release --dry-run — mostra o que seria versionado/publicado, sem alterar nada
+# Ver o que seria versionado/publicado agora, sem alterar nada (equivalente a `pnpm release:dry`)
+nx release --dry-run
+
+# O mesmo, só para um grupo — nomes em nx.json → release.groups (core, tokens, styles)
+nx release --dry-run -g core
+
+# O mesmo, só para um pacote específico
+nx release --dry-run -p @welllucky/luck-tokens
+
+# Forçar um bump específico, ignorando o que os commits sugerem (ex.: patch manual)
+nx release patch -g styles --dry-run
+
+# Versionar e gerar changelog sem publicar (revisar antes de soltar)
+nx release --skip-publish
+
+# Publicar de novo o que já foi versionado, sem versionar outra vez
+nx release publish --dry-run
+
+# Ver a configuração de release já resolvida (grupos, tag pattern, etc.)
+nx release --printConfig
+
+# Primeira publicação de um pacote novo (sem tag anterior para comparar)
+nx release -p @welllucky/luck-novo-pacote --first-release --dry-run
 ```
+
+Rodar qualquer um desses **sem** `--dry-run` versiona/publica de verdade — normalmente isso é papel do workflow **Release** na CI, não da máquina local. Use local só para conferir (`--dry-run`) ou numa emergência (`--skip-publish` para revisar antes, depois `nx release publish` manual).
 
 ## Instalação nos apps
 
