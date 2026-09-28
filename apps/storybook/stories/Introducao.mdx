@@ -1,0 +1,57 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introdução" />
+
+<div style={{ display: "flex", alignItems: "center", gap: 16, margin: "8px 0 24px" }}>
+  <luck-logo variant="symbol" size="48" motion="rise"></luck-logo>
+  <div>
+    <div className="luck-eyebrow">01 / DESIGN SYSTEM</div>
+    <h1 className="luck-h2" style={{ margin: 0 }}>Luck</h1>
+  </div>
+</div>
+
+O **Luck** é o design system do ecossistema **WL3**: a linguagem visual compartilhada pelo portfólio, pelo backoffice e pelas próximas aplicações. Ele implementa a releitura **V4 · Tátil**: planos sólidos separados por sombra, âmbar como único acento e movimento como parte da linguagem.
+
+Os componentes são escritos **uma vez** em [Stencil](https://stenciljs.com) como Web Components e distribuídos com adaptadores gerados para React, Angular e Vue.
+
+## Pacotes
+
+| Pacote          | Para quê                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `@luck/tokens`  | Cores, tipografia, espaçamento, raios, sombras e movimento em CSS, JS/TS e JSON            |
+| `@luck/styles`  | `global.css`: fontes auto-hospedadas, tokens, base do documento e utilitários `luck-*`     |
+| `@luck/core`    | Web Components `<luck-*>` (Shadow DOM, formulários nativos, SSR via `hydrate`)             |
+| `@luck/react`   | Componentes React tipados (`<LuckButton>`), com eventos `onLuckChange`                     |
+| `@luck/angular` | Componentes standalone e adaptadores para `ngModel` / Reactive Forms                       |
+| `@luck/vue`     | Componentes Vue 3 com `v-model`                                                            |
+| `@luck/assets`  | Logo Ritmo em SVG/PNG, favicons, ícones de app e imagens                                   |
+
+## Começando
+
+```css
+/* Uma vez, na entrada da aplicação */
+@import "@luck/styles/global.css";
+```
+
+```ts
+// Com bundler: registre os componentes que usar
+import { defineCustomElementLuckButton } from "@luck/core/components";
+defineCustomElementLuckButton();
+```
+
+```html
+<luck-button icon-right="arrow-up-right">Explorar projetos</luck-button>
+```
+
+Veja **Fundamentos → Uso nos frameworks** para React, Angular e Vue.
+
+## Princípios
+
+- **Tecla.** Botões afundam ao pressionar e voltam com mola; campos são poços; cards são superfícies elevadas.
+- **Luz.** O halo âmbar segue o cursor; cards inclinam em 3D.
+- **Resposta.** Todo clique tem retorno: spinner → ✓, ícone que troca, aviso.
+- **Revelação.** Entradas sobem 18 px, escalonadas a cada 70 ms.
+- **Âmbar é o único acento.** Azul sinaliza apenas empresas; roxo, apenas conhecimentos. Nunca em botões ou controles.
+- **Temas.** Escuro por padrão; claro com `data-theme="light"` em qualquer escopo. Intensidade do movimento com `data-motion="sutil|expressivo"`; `prefers-reduced-motion` zera tudo.
+
+Use a barra de ferramentas acima para alternar tema e intensidade de movimento em qualquer página.

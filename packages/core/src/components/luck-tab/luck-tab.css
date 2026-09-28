@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  animation: luck-tab-slide var(--d-slow) var(--ease-emphasized) both;
+}
+
+:host(:not([active])) {
+  display: none;
+}
+
+:host(:empty) {
+  display: none;
+}
+
+:host(:focus-visible) {
+  outline: 2px solid var(--interactive);
+  outline-offset: 3px;
+}
+
+@keyframes luck-tab-slide {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 0) * 1px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    animation: none;
+  }
+}

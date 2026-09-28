@@ -1,0 +1,147 @@
+/* Campo rebaixado (poço) com rótulo flutuante: Input, Textarea e Select. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+:host([disabled]) {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.box {
+  position: relative;
+}
+
+.control {
+  display: block;
+  width: 100%;
+  height: 54px;
+  padding: 20px 42px 6px 14px;
+  margin: 0;
+  border-radius: var(--radius-md);
+  border: 0;
+  background: var(--well);
+  color: var(--fg);
+  font: inherit;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  outline: 0;
+  box-shadow:
+    var(--shadow-well),
+    0 0 0 0 var(--interactive);
+  transition: box-shadow var(--d-base) var(--ease-emphasized);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.has-icon .control {
+  padding-left: 42px;
+}
+
+.control:focus {
+  box-shadow:
+    var(--shadow-well),
+    0 0 0 2px var(--interactive);
+}
+
+.label {
+  position: absolute;
+  left: 14px;
+  top: 17px;
+  font-size: var(--text-sm);
+  color: var(--fg-faint);
+  transform-origin: 0 0;
+  transition:
+    transform var(--d-base) var(--ease-emphasized),
+    color var(--d-base);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.has-icon .label {
+  left: 42px;
+}
+
+.control:focus + .label,
+.control:not(:placeholder-shown) + .label,
+.is-floating .label {
+  transform: translateY(-9px) scale(0.78);
+  color: var(--fg-muted);
+}
+
+.control:focus + .label {
+  color: var(--accent-text);
+}
+
+.icon {
+  position: absolute;
+  left: 14px;
+  top: 19px;
+  color: var(--fg-faint);
+  transition: color var(--d-base);
+}
+
+.box:focus-within .icon {
+  color: var(--accent-text);
+}
+
+.valid {
+  position: absolute;
+  right: 14px;
+  top: 19px;
+  display: inline-flex;
+  color: var(--accent-text);
+  transform: scale(0) rotate(-45deg);
+  transition: transform var(--d-slow) var(--ease-spring);
+}
+
+.is-valid .valid {
+  transform: none;
+}
+
+.msg {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--d-base) var(--ease-emphasized);
+}
+
+.msg > span {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption);
+  color: var(--fg-faint);
+  transition: padding var(--d-base);
+}
+
+.has-msg .msg {
+  grid-template-rows: 1fr;
+}
+
+.has-msg .msg > span {
+  padding-top: 7px;
+}
+
+.is-error .msg > span {
+  color: var(--danger);
+}
+
+.is-error .control,
+.is-error .control:focus {
+  box-shadow:
+    var(--shadow-well),
+    0 0 0 2px var(--danger);
+}
+
+.box.is-shaking {
+  animation: luck-shake 420ms var(--ease-standard);
+}

@@ -1,0 +1,20 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+
+.box {
+  border-radius: 50%;
+}
+
+.box::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--on-interactive);
+  transform: scale(0);
+  transition: transform var(--d-slow) var(--ease-spring);
+}
+
+input:checked + .box::after {
+  transform: scale(1);
+}

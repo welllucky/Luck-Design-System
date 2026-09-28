@@ -1,0 +1,15 @@
+:host {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: 1.4;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  vertical-align: middle;
+}

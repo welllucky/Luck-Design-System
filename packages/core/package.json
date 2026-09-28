@@ -1,0 +1,84 @@
+{
+  "name": "@luck/core",
+  "version": "0.1.0",
+  "description": "Web Components do design system WL3, escritos uma vez em Stencil e consumidos por qualquer framework.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "collection": "./dist/collection/collection-manifest.json",
+  "unpkg": "./dist/luck/luck.esm.js",
+  "customElements": "./custom-elements.json",
+  "sideEffects": [
+    "./dist/components/*.js",
+    "./dist/luck/*.js",
+    "./loader/*.js"
+  ],
+  "files": [
+    "dist",
+    "loader",
+    "custom-elements.json"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./components/*.js": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./components/*": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./dist/components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./dist/components/*.js": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./dist/*": "./dist/*",
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js",
+      "require": "./loader/index.cjs.js"
+    },
+    "./hydrate": {
+      "types": "./dist/hydrate/index.d.ts",
+      "import": "./dist/hydrate/index.mjs",
+      "require": "./dist/hydrate/index.js"
+    },
+    "./custom-elements.json": "./custom-elements.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "stencil build",
+    "dev": "stencil build --watch",
+    "test": "stencil test --spec",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "lucide": "1.47.0"
+  },
+  "devDependencies": {
+    "@stencil/angular-output-target": "1.5.0",
+    "@stencil/core": "4.45.0",
+    "@stencil/react-output-target": "1.6.2",
+    "@stencil/vue-output-target": "0.14.3",
+    "@types/jest": "29.5.14",
+    "@types/node": "^24.0.0",
+    "@luck/tokens": "workspace:*",
+    "jest": "29.7.0",
+    "jest-cli": "29.7.0",
+    "typescript": "~6.0.3"
+  }
+}

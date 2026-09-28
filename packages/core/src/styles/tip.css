@@ -1,0 +1,38 @@
+/* Balão de dica (tooltip e confirmação de IconButton). */
+.tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  font: 600 12px / 1.2 var(--font-sans);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 6px) scale(0.8);
+  transform-origin: 50% 100%;
+  transition:
+    opacity var(--d-fast) var(--ease-standard),
+    transform var(--d-base) var(--ease-spring);
+  z-index: 40;
+}
+
+.tip:empty {
+  display: none;
+}
+
+.tip--bottom {
+  bottom: auto;
+  top: calc(100% + 10px);
+  transform: translate(-50%, -6px) scale(0.8);
+  transform-origin: 50% 0;
+}
+
+.tip.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}

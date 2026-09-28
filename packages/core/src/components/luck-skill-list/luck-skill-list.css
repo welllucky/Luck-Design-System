@@ -1,0 +1,117 @@
+@import "../../styles/shared.css";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-sans);
+  color: var(--fg);
+}
+
+.item {
+  border-radius: var(--radius-md);
+  transition:
+    background var(--d-base),
+    box-shadow var(--d-base);
+}
+
+.item.is-open {
+  background: var(--surface-3);
+  box-shadow: var(--shadow-key-sm);
+}
+
+.head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--fg);
+  text-align: left;
+  border-radius: var(--radius-md);
+}
+
+.head:hover {
+  background: var(--surface-2);
+}
+
+.is-open .head:hover {
+  background: none;
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--signal-knowledge);
+  transition: transform var(--d-slow) var(--ease-spring);
+}
+
+.head:hover .icon {
+  transform: translateY(-2px) rotate(-10deg) scale(1.1);
+}
+
+.title {
+  flex: 1;
+}
+
+.chev {
+  color: var(--fg-faint);
+  transition:
+    transform var(--d-slow) var(--ease-spring),
+    color var(--d-fast);
+}
+
+.is-open .chev {
+  transform: rotate(180deg);
+  color: var(--accent-text);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--d-slow) var(--ease-emphasized);
+}
+
+.panel > div {
+  overflow: hidden;
+}
+
+.is-open .panel {
+  grid-template-rows: 1fr;
+}
+
+.panel p {
+  margin: 0;
+  padding: 0 10px 0 38px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--d-base),
+    transform var(--d-base) var(--ease-emphasized);
+}
+
+.is-open .panel p {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
+}
+
+.stack {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--signal-knowledge);
+  padding-bottom: 6px !important;
+}
+
+.summary {
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--fg-muted);
+  padding-bottom: 12px !important;
+}

@@ -1,0 +1,31 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+@import "../../styles/field.css";
+
+.control {
+  cursor: pointer;
+  padding-right: 40px;
+}
+
+option {
+  background: var(--surface-1);
+  color: var(--fg);
+}
+
+.chevron {
+  position: absolute;
+  right: 14px;
+  top: 19px;
+  color: var(--fg-faint);
+  pointer-events: none;
+  transition: transform var(--d-base) var(--ease-spring);
+}
+
+.box:focus-within .chevron {
+  transform: rotate(180deg);
+  color: var(--accent-text);
+}
+
+slot {
+  display: none;
+}

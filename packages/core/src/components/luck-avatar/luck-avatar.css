@@ -1,0 +1,36 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+@import "../../styles/dot.css";
+
+:host {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  box-shadow: 0 0 0 1px var(--border-strong);
+  vertical-align: middle;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.status {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28%;
+  height: 28%;
+  min-width: 8px;
+  min-height: 8px;
+  box-shadow: 0 0 0 2px var(--surface-1);
+}

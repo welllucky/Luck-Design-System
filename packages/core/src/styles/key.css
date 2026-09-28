@@ -1,0 +1,146 @@
+/* Botão tecla: sombra sólida abaixo, afunda ao pressionar e volta com mola. */
+.key {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  margin: 0;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  background: none;
+  color: var(--fg);
+  -webkit-tap-highlight-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-key);
+  transition:
+    transform var(--d-fast) var(--ease-spring),
+    box-shadow var(--d-fast) var(--ease-spring),
+    background var(--d-fast),
+    filter var(--d-fast),
+    color var(--d-fast);
+}
+
+.key:hover {
+  color: var(--fg);
+}
+
+.key:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-pressed);
+  transition-duration: var(--d-press);
+  transition-timing-function: var(--ease-standard);
+}
+
+.key--sm {
+  height: 34px;
+  padding: 0 12px;
+  font-size: var(--text-xs);
+}
+
+.key--lg {
+  height: 48px;
+  padding: 0 22px;
+  font-size: 15px;
+}
+
+.key--primary,
+.key--primary:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-key-accent);
+}
+
+.key--primary:hover {
+  filter: brightness(1.07);
+}
+
+.key--primary:active {
+  box-shadow: 0 0 0 var(--accent-key);
+}
+
+.key--secondary {
+  background: var(--surface-3);
+  border-color: var(--border);
+}
+
+.key--secondary:hover {
+  background: color-mix(in oklch, var(--surface-3) 88%, var(--fg));
+}
+
+.key--ghost {
+  box-shadow: none;
+  transform: none;
+  color: var(--fg-muted);
+}
+
+.key--ghost:hover {
+  background: var(--surface-2);
+}
+
+.key--ghost:active {
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+.key:disabled,
+.key[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+.key--icon {
+  width: 40px;
+  padding: 0;
+}
+
+.key--icon.key--sm {
+  width: 34px;
+}
+
+.key--icon.key--lg {
+  width: 48px;
+}
+
+/* Troca de ícones (confirmação, tema) */
+.swap {
+  position: relative;
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+}
+
+.swap--two > luck-icon {
+  position: absolute;
+  inset: 0;
+  transition:
+    transform var(--d-slow) var(--ease-spring),
+    opacity var(--d-fast);
+}
+
+.swap--two > luck-icon:last-child {
+  opacity: 0;
+  transform: scale(0.3) rotate(-90deg);
+}
+
+.is-swapped .swap--two > luck-icon:first-child {
+  opacity: 0;
+  transform: scale(0.3) rotate(90deg);
+}
+
+.is-swapped .swap--two > luck-icon:last-child {
+  opacity: 1;
+  transform: none;
+}

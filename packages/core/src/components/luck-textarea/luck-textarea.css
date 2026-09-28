@@ -1,0 +1,10 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+
+.field--textarea .control {
+  height: auto;
+  min-height: 96px;
+  padding-top: 26px;
+  resize: vertical;
+  line-height: 1.5;
+}

@@ -1,0 +1,67 @@
+/* Caixa de seleção e radio: poço rebaixado que vira tecla âmbar ao marcar. */
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+:host([disabled]) {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--fg);
+  cursor: pointer;
+  user-select: none;
+  min-height: 24px;
+}
+
+.check input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-xs);
+  background: var(--well);
+  box-shadow: var(--shadow-well);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition:
+    transform var(--d-fast) var(--ease-spring),
+    background var(--d-fast),
+    box-shadow var(--d-fast);
+}
+
+.check:active .box {
+  transform: translateY(1px) scale(0.88);
+}
+
+.check input:checked + .box {
+  background: var(--interactive);
+  box-shadow: 0 2px 0 var(--accent-key);
+  animation: luck-pop var(--d-slow) var(--ease-spring);
+}
+
+.check input:focus-visible + .box {
+  outline: 2px solid var(--interactive);
+  outline-offset: 2px;
+}
+
+.label:empty {
+  display: none;
+}

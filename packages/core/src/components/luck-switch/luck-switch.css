@@ -1,0 +1,73 @@
+@import "../../styles/shared.css";
+
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+:host([disabled]) {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.label:empty {
+  display: none;
+}
+
+.track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--well);
+  box-shadow: var(--shadow-well);
+  transition: background var(--d-base) var(--ease-standard);
+  flex: none;
+}
+
+.thumb {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-xs);
+  background: var(--fg-muted);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  transition:
+    left var(--d-slow) var(--ease-spring),
+    width var(--d-fast) var(--ease-standard),
+    background var(--d-base);
+}
+
+.track:active .thumb {
+  width: 24px;
+}
+
+:host([checked]) .track {
+  background: var(--interactive);
+  box-shadow: none;
+}
+
+:host([checked]) .thumb {
+  left: 20px;
+  background: var(--on-interactive);
+}
+
+:host([checked]) .track:active .thumb {
+  left: 14px;
+}

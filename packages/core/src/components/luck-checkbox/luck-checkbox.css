@@ -1,0 +1,23 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+
+.box svg {
+  width: 13px;
+  height: 13px;
+}
+
+.box path {
+  fill: none;
+  stroke: var(--on-interactive);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  transition: stroke-dashoffset var(--d-base) var(--ease-emphasized);
+}
+
+input:checked + .box path {
+  stroke-dashoffset: 0;
+  transition-delay: 60ms;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "luck",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design system do ecossistema WL3: tokens, estilos globais, Web Components Stencil e adaptadores para frameworks.",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "pnpm -r --workspace-concurrency=1 --filter \"./packages/**\" build",
+    "dev": "pnpm --filter @luck/core dev",
+    "storybook": "pnpm build && pnpm --filter @luck/storybook dev",
+    "build:storybook": "pnpm build && pnpm --filter @luck/storybook build",
+    "test": "pnpm --filter @luck/core test",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@changesets/cli": "3.0.3",
+    "lefthook": "^2.1.14",
+    "typescript": "~6.0.3"
+  }
+}

@@ -1,0 +1,51 @@
+import { Meta, ColorPalette, ColorItem } from "@storybook/addon-docs/blocks";
+import { palette, resolveTheme } from "@luck/tokens";
+
+<Meta title="Fundamentos/Cores" />
+
+# Cores
+
+Tinta quente quase preta (`#111110`) e papel quente (`#EDECE7`). **Âmbar `#F5B301` é o único acento de interface**: CTA, foco, seleção, controles, disponibilidade. **Azul** sinaliza somente empresas e **roxo** somente conhecimentos. No tema claro, o âmbar como texto vira `#8A5A00`.
+
+Use sempre os **tokens semânticos** (`var(--accent)`, `var(--surface-1)`) nas interfaces. A paleta crua existe para compor os temas.
+
+## Semânticas
+
+<ColorPalette>
+  {Object.keys(resolveTheme("dark")).map((k) => (
+    <ColorItem
+      key={k}
+      title={`--${k}`}
+      subtitle="escuro · claro"
+      colors={{ escuro: resolveTheme("dark")[k], claro: resolveTheme("light")[k] }}
+    />
+  ))}
+</ColorPalette>
+
+## Paleta
+
+<ColorPalette>
+  {Object.entries(palette).map(([group, tones]) => (
+    <ColorItem
+      key={group}
+      title={group}
+      subtitle={`--${group}-*`}
+      colors={Object.fromEntries(Object.entries(tones).map(([t, v]) => [`${group}-${t}`, v]))}
+    />
+  ))}
+</ColorPalette>
+
+## Em código
+
+```css
+.destaque {
+  color: var(--accent-text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+```
+
+```ts
+import { resolveTheme, palette } from "@luck/tokens";
+resolveTheme("light").accent; // "#F5B301"
+```

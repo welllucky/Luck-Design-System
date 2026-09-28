@@ -1,0 +1,19 @@
+/* Ponto de status que "respira". */
+.dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: luck-breathe 2.4s var(--ease-standard) infinite;
+}

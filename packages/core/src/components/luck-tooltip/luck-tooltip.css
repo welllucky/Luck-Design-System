@@ -1,0 +1,14 @@
+@import "../../styles/shared.css";
+@import "../../styles/tip.css";
+
+:host {
+  position: relative;
+  display: inline-flex;
+}
+
+:host(:hover) .tip,
+:host(:focus-within) .tip {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 250ms;
+}

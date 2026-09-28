@@ -1,0 +1,120 @@
+@import "../../styles/shared.css";
+@import "../../styles/keyframes.css";
+
+:host {
+  --_tone: var(--accent-text);
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  font-family: var(--font-sans);
+}
+
+:host([tone="danger"]) {
+  --_tone: var(--danger);
+}
+
+:host([tone="company"]) {
+  --_tone: var(--signal-company);
+}
+
+:host([tone="knowledge"]) {
+  --_tone: var(--signal-knowledge);
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  overflow: hidden;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-raised);
+  color: var(--fg);
+  animation: luck-toast-in var(--d-slow) var(--ease-spring) both;
+}
+
+.toast.is-leaving {
+  animation: luck-toast-out var(--d-base) var(--ease-standard) forwards;
+}
+
+.icon {
+  color: var(--_tone);
+  display: inline-flex;
+  margin-top: 1px;
+  animation: luck-pop var(--d-slow) var(--ease-spring) 120ms both;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.text b {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.text small {
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+  line-height: 1.4;
+}
+
+.close {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--fg-faint);
+  padding: 2px;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+}
+
+.close:hover {
+  color: var(--fg);
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: luck-bar 4s linear forwards;
+}
+
+:host([tone="danger"]) .bar {
+  background: var(--danger);
+}
+
+.toast:hover .bar {
+  animation-play-state: paused;
+}
+
+@keyframes luck-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+}
+
+@keyframes luck-toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes luck-bar {
+  to {
+    transform: scaleX(0);
+  }
+}

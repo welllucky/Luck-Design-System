@@ -1,0 +1,17 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Cadeia de suprimentos: sem subdependências de fontes exóticas (git, tarball),
+# sem rebaixar a confiança de um pacote e só versões publicadas há 7 dias ou mais.
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
+# Versões antigas publicadas antes da proveniência do npm (falsos positivos conhecidos).
+trustPolicyExclude:
+  - semver@6.3.1
+minimumReleaseAge: 10080
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  lefthook: true

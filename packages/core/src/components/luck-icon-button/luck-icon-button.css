@@ -1,0 +1,27 @@
+@import "../../styles/shared.css";
+@import "../../styles/key.css";
+@import "../../styles/tip.css";
+
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.key:hover .tip--hover,
+.key:focus-visible .tip--hover {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 250ms;
+}
+
+.is-swapped .tip--hover {
+  opacity: 0 !important;
+}
+
+.is-swapped .confirm {
+  color: var(--accent-text);
+}
+
+.key--primary.is-swapped .confirm {
+  color: inherit;
+}

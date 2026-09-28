@@ -1,0 +1,36 @@
+{
+  "name": "@luck/vue",
+  "version": "0.1.0",
+  "description": "Componentes Vue 3 do Luck (gerados a partir de @luck/core), com v-model.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@luck/core": "workspace:*",
+    "@stencil/vue-output-target": "0.14.3"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.38"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  }
+}

@@ -1,0 +1,8 @@
+pre-commit:
+  parallel: false
+  jobs:
+    - name: staged-whitespace
+      run: git diff --cached --check -- . ":(exclude)packages/core/src/components/*/readme.md"
+    - name: staged-check
+      glob: "*.{js,cjs,mjs,jsx,ts,tsx,json,jsonc,css}"
+      run: pnpm exec biome check --no-errors-on-unmatched {staged_files}

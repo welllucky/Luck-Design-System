@@ -1,0 +1,30 @@
+@import "../../styles/shared.css";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--font-sans);
+}
+
+.legend {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.options {
+  display: flex;
+  gap: 10px;
+}
+
+.options--vertical {
+  flex-direction: column;
+}
+
+.options--horizontal {
+  flex-wrap: wrap;
+  gap: 18px;
+}

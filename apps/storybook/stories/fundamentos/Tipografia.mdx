@@ -1,0 +1,41 @@
+import { Meta, Typeset } from "@storybook/addon-docs/blocks";
+import { typography } from "@luck/tokens";
+
+<Meta title="Fundamentos/Tipografia" />
+
+# Tipografia
+
+**Manrope** 400–800 para texto; títulos em 700 com tracking de −0.045em no display e −0.03em nos títulos. **JetBrains Mono** para legendas, índices, tags e metadados (11–12 px, maiúsculas, +0.06em). As fontes são auto-hospedadas em `@luck/styles`.
+
+<Typeset
+  fontSizes={Object.values(typography.text).map((v) => parseInt(v))}
+  fontWeight={700}
+  sampleText="Do design à engenharia."
+  fontFamily="Manrope"
+/>
+
+## Classes utilitárias
+
+<div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+  <span className="luck-eyebrow">01 / FRENTES DE ATUAÇÃO</span>
+  <h1 className="luck-display">Do design <span className="luck-accent">à engenharia.</span></h1>
+  <h2 className="luck-h2">Frentes em que <span className="luck-accent">atuo hoje.</span></h2>
+  <h4 className="luck-h4">Título de card</h4>
+  <p className="luck-lead">Sou Senior Software Engineer e Tech Lead. Vamos conversar sobre o próximo desafio.</p>
+  <p className="luck-body">Texto corrido em 16 px com entrelinha 1.6.</p>
+  <p className="luck-small">Texto de apoio em 14 px.</p>
+  <span className="luck-mono">Metadado · 2024</span>
+</div>
+
+| Classe          | Uso                                                        |
+| --------------- | ---------------------------------------------------------- |
+| `.luck-display` | Chamada principal do hero                                  |
+| `.luck-h1`…`h4` | Hierarquia de títulos                                      |
+| `.luck-lead`    | Parágrafo de abertura                                      |
+| `.luck-body`    | Texto corrido                                              |
+| `.luck-small`   | Texto de apoio                                             |
+| `.luck-eyebrow` | Legenda numerada em mono: `01 / CONTATO E REDES SOCIAIS`   |
+| `.luck-mono`    | Metadados e índices                                        |
+| `.luck-accent`  | Ênfase âmbar na segunda parte do título                    |
+
+**Títulos em duas partes:** chamada + ênfase em âmbar. **Sem emoji.** Separador `·`; setas vêm dos ícones.

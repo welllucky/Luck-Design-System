@@ -1,0 +1,32 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Fundamentos/Marca" />
+
+# Marca
+
+A logo **WL3 "Ritmo"**: três Ls crescendo com alturas 0,382 · 0,618 · 1 sobre uma base comum, o último em âmbar (o ³). Wordmark "welllucky" em Manrope 800 com os três "l" redesenhados no mesmo ritmo.
+
+<div className="sb-row" style={{ gap: 32, margin: "24px 0" }}>
+  <luck-logo variant="symbol" size="48"></luck-logo>
+  <luck-logo variant="horizontal" size="40"></luck-logo>
+  <luck-logo variant="stacked" size="56"></luck-logo>
+  <luck-logo variant="app-icon" size="64"></luck-logo>
+</div>
+
+<div style={{ margin: "24px 0" }}>
+  <luck-logo variant="signature" size="44"></luck-logo>
+</div>
+
+## Regras
+
+- Não espelhar, girar ou distorcer. **Nunca azul ou roxo no símbolo.**
+- Área de proteção de 1 t (18 % do lado) em volta.
+- Mínimo: símbolo 16 px, horizontal 96 px. Abaixo de 24 px, a versão reduzida entra sozinha.
+
+## Arquivos
+
+`@luck/assets` traz a logo em SVG e PNG (6 formas × 6 cores, com e sem fundo), favicons, ícone de app para iOS, Android e PWA, e as imagens da marca. Veja o [README do pacote](https://github.com/welllucky/luck/tree/main/packages/assets).
+
+## Ícones
+
+Lucide com traço 1.75 e tamanho 16, via `<luck-icon name="arrow-up-right">`. Glifos desenhados à mão só no ✓ animado de checkbox e botão. Veja **Componentes → Marca → Logo → Ícones**.

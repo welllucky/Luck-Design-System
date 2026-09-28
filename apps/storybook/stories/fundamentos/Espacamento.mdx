@@ -1,0 +1,57 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { spacing, radius, shadows } from "@luck/tokens";
+
+<Meta title="Fundamentos/Espaçamento, raios e elevação" />
+
+# Espaçamento, raios e elevação
+
+## Espaçamento
+
+Escala de 4 px. Layout: container de 1240 px, leitura em 760 px, grid de 20 px, padding de card 22 px, alvos mínimos de 44 px.
+
+<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  {Object.entries(spacing.space).map(([k, v]) => (
+    <div key={k} style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <code style={{ width: 90 }}>--space-{k}</code>
+      <span style={{ width: v, height: 12, background: "var(--accent)", borderRadius: 2 }} />
+      <span className="luck-mono">{v}</span>
+    </div>
+  ))}
+</div>
+
+## Raios · V5 “Raio vivo”
+
+Cantos quase retos: **raio ≈ altura ÷ 10, teto de 8 px**. Círculo só para avatar, status e radio.
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+  {Object.entries(radius).filter(([k]) => k !== "full").map(([k, v]) => (
+    <div key={k} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+      <div style={{ width: 72, height: 72, background: "var(--surface-2)", border: "1px solid var(--border-strong)", borderRadius: v }} />
+      <code>--radius-{k}</code>
+      <span className="luck-mono">{v}</span>
+    </div>
+  ))}
+</div>
+
+2 tag, checkbox, polegar do switch · 3 aba, tooltip, trilho do switch · 4 botão, campo · 6 card, navbar, toast · 8 diálogo, hero, ícone de app.
+
+## Elevação tátil
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: 24, padding: "12px 0 24px" }}>
+  {Object.keys(shadows.base).map((k) => (
+    <div key={k} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+      <div
+        style={{
+          width: 120,
+          height: 64,
+          borderRadius: 6,
+          background: k === "key-accent" ? "var(--accent)" : k === "well" ? "var(--well)" : "var(--surface-3)",
+          boxShadow: `var(--shadow-${k})`,
+        }}
+      />
+      <code>--shadow-{k}</code>
+    </div>
+  ))}
+</div>
+
+Botões são **teclas** (`--shadow-key`, sombra sólida de 3 px). Campos e trilhos são **poços** (`--shadow-well`). Cards são **superfícies elevadas** (`--shadow-raised`). As sombras são recalculadas em cada escopo de tema.

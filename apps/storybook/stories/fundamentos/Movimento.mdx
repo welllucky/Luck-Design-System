@@ -1,0 +1,56 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { motion } from "@luck/tokens";
+
+<Meta title="Fundamentos/Movimento" />
+
+# Movimento
+
+A interface precisa encantar ao ser usada: movimento e microinterações fazem parte da linguagem, não são enfeite.
+
+| Princípio     | Como aparece                                                          |
+| ------------- | --------------------------------------------------------------------- |
+| **Tecla**     | Pressionar (`translateY(2px)`, sombra colapsa) e voltar com mola       |
+| **Luz**       | Halo âmbar sob o cursor, tilt 3D nos cards                            |
+| **Resposta**  | Spinner → ✓, ícone que troca, aviso                                   |
+| **Revelação** | Subida de 18 px escalonada a cada 70 ms (`.luck-reveal` + `.is-in`)   |
+
+## Durações
+
+<table>
+  <tbody>
+    {Object.entries(motion.duration).map(([k, v]) => (
+      <tr key={k}>
+        <td><code>--d-{k}</code></td>
+        <td>{v}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Curvas
+
+<table>
+  <tbody>
+    {Object.entries(motion.easing).map(([k, v]) => (
+      <tr key={k}>
+        <td><code>--ease-{k}</code></td>
+        <td><code>{v}</code></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Intensidade
+
+`data-motion="sutil"` troca a mola por uma curva padrão e reduz inclinação e magnetismo; `data-motion="expressivo"` exagera. Funciona em qualquer escopo. `prefers-reduced-motion: reduce` zera animações e transições, inclusive dentro do Shadow DOM.
+
+Experimente pela barra de ferramentas (**Movimento**) nas páginas de Button e Card.
+
+## Troca de tema
+
+```ts
+import { toggleTheme } from "@luck/core";
+button.addEventListener("click", (e) => toggleTheme(e.currentTarget));
+```
+
+O círculo abre a partir do elemento de origem via View Transitions.

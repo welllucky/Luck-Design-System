@@ -1,0 +1,91 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Fundamentos/Uso nos frameworks" />
+
+# Uso nos frameworks
+
+Em todos os casos, importe o CSS global **uma vez**:
+
+```css
+@import "@luck/styles/global.css";
+```
+
+Os pacotes são privados: configure o registro no `.npmrc` do projeto consumidor conforme o README do repositório.
+
+## HTML / qualquer framework
+
+Com bundler (Vite, webpack, esbuild), use o build de custom elements e registre só o que usar:
+
+```ts
+import { defineCustomElementLuckButton, defineCustomElementLuckInput } from "@luck/core/components";
+defineCustomElementLuckButton();
+defineCustomElementLuckInput();
+```
+
+Sem bundler (HTML estático, CDN), use o carregador lazy, que busca cada componente sob demanda:
+
+```html
+<script type="module">
+  import { defineCustomElements } from "https://cdn.jsdelivr.net/npm/@luck/core/loader/index.js";
+  defineCustomElements();
+</script>
+```
+
+Os adaptadores de React, Angular e Vue já registram cada componente sozinhos.
+
+## React
+
+```tsx
+import { LuckButton, LuckInput } from "@luck/react";
+
+<LuckInput label="E-mail" type="email" onLuckInput={(e) => setEmail(e.detail.value)} />
+<LuckButton iconRight="send" onClick={enviar}>Enviar mensagem</LuckButton>
+```
+
+## Angular (standalone)
+
+```ts
+import { LUCK_COMPONENTS, LUCK_FORMS } from "@luck/angular";
+
+@Component({
+  imports: [FormsModule, ...LUCK_COMPONENTS, ...LUCK_FORMS],
+  template: `
+    <luck-input label="E-mail" type="email" [(ngModel)]="email" />
+    <luck-switch label="Receber novidades" [(ngModel)]="optIn" />
+    <luck-button iconRight="send" (click)="enviar()">Enviar</luck-button>
+  `,
+})
+export class ContatoComponent {}
+```
+
+## Vue 3
+
+```vue
+<script setup lang="ts">
+import { LuckButton, LuckInput } from "@luck/vue";
+const email = ref("");
+</script>
+
+<template>
+  <LuckInput label="E-mail" type="email" v-model="email" />
+  <LuckButton icon-right="send" @click="enviar">Enviar</LuckButton>
+</template>
+```
+
+No Vue, declare as tags `luck-*` como custom elements em `compilerOptions.isCustomElement` se usar as tags diretamente.
+
+## Ícones
+
+O conjunto padrão cobre o vocabulário do DS. Para outros ícones do Lucide:
+
+Importe `registerIcons` da **mesma entrada** que registra os componentes (`@luck/core/components`, `@luck/react`, `@luck/angular` ou `@luck/vue`; `@luck/core` só com o carregador lazy):
+
+```ts
+import { registerIcons } from "@luck/core/components";
+import { Rocket, Server } from "lucide";
+registerIcons({ Rocket, Server }); // <luck-icon name="rocket">
+```
+
+## Formulários
+
+`luck-input`, `luck-textarea`, `luck-select`, `luck-checkbox`, `luck-radio-group` e `luck-switch` são *form-associated*: entram no `FormData`, respeitam `required`, `reset` e `disabled` do `<fieldset>`. `luck-button type="submit"` envia o formulário ao qual pertence.

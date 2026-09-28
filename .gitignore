@@ -1,0 +1,26 @@
+node_modules/
+dist/
+loader/
+www/
+storybook-static/
+*.tsbuildinfo
+.stencil/
+coverage/
+
+# Arquivos gerados pelo Stencil nos adaptadores
+packages/react/src/generated/
+packages/angular/src/generated/
+packages/vue/src/generated/
+
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.log
+.env*
+.remember/
+.claude/
+
+# Gerado pelo build do core
+packages/core/custom-elements.json
