@@ -18,7 +18,7 @@ Design system do ecossistema WL3. Monorepo pnpm; textos, comentários e document
 - Props de lista aceitam array ou JSON (`parseList`).
 - Campos de formulário são `formAssociated`; use `setFormValue`/`syncValidity` de `utils/field.ts` (guardados para SSR e testes).
 - APIs de navegador (`MutationObserver`, `ResizeObserver`, `document`) precisam de guarda: o core também roda no hydrate/SSR.
-- Stateful só o registro de ícones: adaptadores reexportam de `@luck/core/components`, não de `@luck/core`.
+- Stateful só o registro de ícones: adaptadores reexportam de `@welllucky/luck-core/components`, não de `@welllucky/luck-core`.
 - Âmbar é o único acento; azul só empresas; roxo só conhecimentos. Raio ≈ altura ÷ 10, teto 8 px. Sem emoji.
 
 ## Testes (obrigatórios)
@@ -41,5 +41,5 @@ O pre-commit (lefthook) roda `pnpm test` completo (~20 s): build do core, unitá
 ## Verificação
 
 ```sh
-pnpm lint && pnpm build && pnpm test && pnpm --filter @luck/storybook build
+pnpm lint && pnpm build && pnpm test && pnpm --filter @welllucky/luck-storybook build
 ```

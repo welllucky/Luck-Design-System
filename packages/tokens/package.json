@@ -1,8 +1,21 @@
 {
-  "name": "@luck/tokens",
+  "name": "@welllucky/luck-tokens",
   "version": "0.1.0",
   "description": "Tokens de design do WL3 (cores, tipografia, espaçamento, raios, sombras e movimento) em CSS, JS e JSON.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welllucky/Luck-Design-System.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/welllucky/Luck-Design-System#readme",
+  "bugs": {
+    "url": "https://github.com/welllucky/Luck-Design-System/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css"

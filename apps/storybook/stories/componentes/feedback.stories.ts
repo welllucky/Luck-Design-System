@@ -1,5 +1,5 @@
-import { showToast } from "@luck/core/components";
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import { showToast } from "@welllucky/luck-core/components";
 import { html } from "lit";
 import { expect, userEvent, waitFor } from "storybook/test";
 import { listen, part, ready, readyAll } from "../support/dom";
@@ -16,7 +16,7 @@ export const Toast: Story = {
     docs: {
       description: {
         story:
-          "Microtexto curto e humano. A barra inferior conta o tempo e pausa no hover. Para empilhar avisos, use `showToast()` de `@luck/core`.",
+          "Microtexto curto e humano. A barra inferior conta o tempo e pausa no hover. Para empilhar avisos, use `showToast()` de `@welllucky/luck-core`.",
       },
     },
   },

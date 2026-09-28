@@ -1,9 +1,9 @@
-import "@luck/styles/global.css";
+import "@welllucky/luck-styles/global.css";
 import "./preview.css";
-import * as luck from "@luck/core/components";
-import manifest from "@luck/core/custom-elements.json";
 import type { Decorator, Preview } from "@storybook/web-components-vite";
 import { setCustomElementsManifest } from "@storybook/web-components-vite";
+import * as luck from "@welllucky/luck-core/components";
+import manifest from "@welllucky/luck-core/custom-elements.json";
 import theme from "./theme";
 
 // Build de custom elements (o recomendado com bundlers como o Vite): registra todos os componentes.

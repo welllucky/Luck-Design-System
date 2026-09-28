@@ -7,17 +7,22 @@ import { Meta } from "@storybook/addon-docs/blocks";
 Em todos os casos, importe o CSS global **uma vez**:
 
 ```css
-@import "@luck/styles/global.css";
+@import "@welllucky/luck-styles/global.css";
 ```
 
-Os pacotes são privados: configure o registro no `.npmrc` do projeto consumidor conforme o README do repositório.
+Os pacotes ficam no GitHub Packages (privados). No projeto consumidor, crie um `.npmrc` e exporte um token com `read:packages` em `NPM_TOKEN`:
+
+```ini
+@welllucky:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+```
 
 ## HTML / qualquer framework
 
 Com bundler (Vite, webpack, esbuild), use o build de custom elements e registre só o que usar:
 
 ```ts
-import { defineCustomElementLuckButton, defineCustomElementLuckInput } from "@luck/core/components";
+import { defineCustomElementLuckButton, defineCustomElementLuckInput } from "@welllucky/luck-core/components";
 defineCustomElementLuckButton();
 defineCustomElementLuckInput();
 ```
@@ -26,7 +31,7 @@ Sem bundler (HTML estático, CDN), use o carregador lazy, que busca cada compone
 
 ```html
 <script type="module">
-  import { defineCustomElements } from "https://cdn.jsdelivr.net/npm/@luck/core/loader/index.js";
+  import { defineCustomElements } from "https://cdn.jsdelivr.net/npm/@welllucky/luck-core/loader/index.js";
   defineCustomElements();
 </script>
 ```
@@ -36,7 +41,7 @@ Os adaptadores de React, Angular e Vue já registram cada componente sozinhos.
 ## React
 
 ```tsx
-import { LuckButton, LuckInput } from "@luck/react";
+import { LuckButton, LuckInput } from "@welllucky/luck-react";
 
 <LuckInput label="E-mail" type="email" onLuckInput={(e) => setEmail(e.detail.value)} />
 <LuckButton iconRight="send" onClick={enviar}>Enviar mensagem</LuckButton>
@@ -45,7 +50,7 @@ import { LuckButton, LuckInput } from "@luck/react";
 ## Angular (standalone)
 
 ```ts
-import { LUCK_COMPONENTS, LUCK_FORMS } from "@luck/angular";
+import { LUCK_COMPONENTS, LUCK_FORMS } from "@welllucky/luck-angular";
 
 @Component({
   imports: [FormsModule, ...LUCK_COMPONENTS, ...LUCK_FORMS],
@@ -62,7 +67,7 @@ export class ContatoComponent {}
 
 ```vue
 <script setup lang="ts">
-import { LuckButton, LuckInput } from "@luck/vue";
+import { LuckButton, LuckInput } from "@welllucky/luck-vue";
 const email = ref("");
 </script>
 
@@ -78,10 +83,10 @@ No Vue, declare as tags `luck-*` como custom elements em `compilerOptions.isCust
 
 O conjunto padrão cobre o vocabulário do DS. Para outros ícones do Lucide:
 
-Importe `registerIcons` da **mesma entrada** que registra os componentes (`@luck/core/components`, `@luck/react`, `@luck/angular` ou `@luck/vue`; `@luck/core` só com o carregador lazy):
+Importe `registerIcons` da **mesma entrada** que registra os componentes (`@welllucky/luck-core/components`, `@welllucky/luck-react`, `@welllucky/luck-angular` ou `@welllucky/luck-vue`; `@welllucky/luck-core` só com o carregador lazy):
 
 ```ts
-import { registerIcons } from "@luck/core/components";
+import { registerIcons } from "@welllucky/luck-core/components";
 import { Rocket, Server } from "lucide";
 registerIcons({ Rocket, Server }); // <luck-icon name="rocket">
 ```

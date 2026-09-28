@@ -8,15 +8,15 @@ A linguagem é a releitura **V4 · Tátil**: botões são teclas que afundam, ca
 
 | Pacote | Conteúdo |
 | --- | --- |
-| [`@luck/tokens`](packages/tokens) | Fonte única dos tokens (`src/index.ts`) → CSS (`tokens.css`, `css/*.css`), JS/TS e `tokens.json` |
-| [`@luck/styles`](packages/styles) | `global.css`: fontes auto-hospedadas (Manrope, JetBrains Mono) + tokens + base do documento e utilitários `luck-*` |
-| [`@luck/core`](packages/core) | 25 Web Components `<luck-*>` com Shadow DOM, formulários nativos (ElementInternals), SSR (`/hydrate`) e `custom-elements.json` |
-| [`@luck/react`](packages/react) | Componentes React gerados (`<LuckButton onLuckChange>`) |
-| [`@luck/angular`](packages/angular) | Componentes standalone + adaptadores `ngModel` / Reactive Forms |
-| [`@luck/vue`](packages/vue) | Componentes Vue 3 com `v-model` |
+| [`@welllucky/luck-tokens`](packages/tokens) | Fonte única dos tokens (`src/index.ts`) → CSS (`tokens.css`, `css/*.css`), JS/TS e `tokens.json` |
+| [`@welllucky/luck-styles`](packages/styles) | `global.css`: fontes auto-hospedadas (Manrope, JetBrains Mono) + tokens + base do documento e utilitários `luck-*` |
+| [`@welllucky/luck-core`](packages/core) | 25 Web Components `<luck-*>` com Shadow DOM, formulários nativos (ElementInternals), SSR (`/hydrate`) e `custom-elements.json` |
+| [`@welllucky/luck-react`](packages/react) | Componentes React gerados (`<LuckButton onLuckChange>`) |
+| [`@welllucky/luck-angular`](packages/angular) | Componentes standalone + adaptadores `ngModel` / Reactive Forms |
+| [`@welllucky/luck-vue`](packages/vue) | Componentes Vue 3 com `v-model` |
 | [`apps/storybook`](apps/storybook) | Documentação: fundamentos, componentes e uso nos frameworks |
 
-`@luck/core`, `@luck/react`, `@luck/angular` e `@luck/vue` são versionados juntos: os adaptadores são gerados a partir da API do core.
+`@welllucky/luck-core`, `@welllucky/luck-react`, `@welllucky/luck-angular` e `@welllucky/luck-vue` são versionados juntos: os adaptadores são gerados a partir da API do core.
 
 ## Componentes
 
@@ -35,24 +35,24 @@ Cada componente tem um `readme.md` gerado ao lado do código com props, eventos,
 ## Uso
 
 ```css
-@import "@luck/styles/global.css";
+@import "@welllucky/luck-styles/global.css";
 ```
 
 ```tsx
 // React
-import { LuckButton } from "@luck/react";
+import { LuckButton } from "@welllucky/luck-react";
 <LuckButton iconRight="arrow-up-right">Explorar projetos</LuckButton>;
 ```
 
 ```ts
 // Angular (standalone)
-import { LUCK_COMPONENTS, LUCK_FORMS } from "@luck/angular";
+import { LUCK_COMPONENTS, LUCK_FORMS } from "@welllucky/luck-angular";
 @Component({ imports: [FormsModule, ...LUCK_COMPONENTS, ...LUCK_FORMS], template: `<luck-input label="E-mail" [(ngModel)]="email" />` })
 ```
 
 ```ts
 // Qualquer stack com bundler
-import { defineCustomElementLuckButton } from "@luck/core/components";
+import { defineCustomElementLuckButton } from "@welllucky/luck-core/components";
 defineCustomElementLuckButton();
 ```
 
@@ -95,11 +95,46 @@ docker run --rm -p 8080:8080 luck-storybook
 
 ## Publicação
 
-Os pacotes ainda não são publicados. Opções em aberto:
+Os pacotes são publicados no **GitHub Packages** (registro npm do GitHub), com a mesma visibilidade privada do repositório.
 
-- **GitHub Packages:** exige que o escopo seja o dono do repositório (`@welllucky`) ou uma organização `luck`.
-- **npm privado:** criar a organização `@luck` no npm (plano pago para pacotes privados).
-- **Workspace local:** consumir via `pnpm link` / `file:` enquanto o ecossistema estiver em poucos repositórios.
+O fluxo é o do [Changesets](https://github.com/changesets/changesets):
+
+1. Toda mudança publicável vem com um changeset: `pnpm changeset` (escolha os pacotes e o tipo: patch, minor ou major).
+2. No merge na `main`, o workflow **Release** abre o PR `chore: versionar pacotes`, que sobe as versões e escreve os CHANGELOGs.
+3. No merge desse PR, o mesmo workflow publica as novas versões, cria as tags e as releases do GitHub.
+
+`@welllucky/luck-core`, `luck-react`, `luck-angular` e `luck-vue` sempre sobem juntos. O `luck-angular` é publicado a partir de `packages/angular/dist`.
+
+## Instalação nos apps
+
+Os pacotes são privados: o app precisa de um token com permissão `read:packages`.
+
+1. Crie um token em **GitHub → Settings → Developer settings → Personal access tokens** com o escopo `read:packages`.
+2. No projeto consumidor, crie um `.npmrc` (e **não** coloque o token nele):
+
+   ```ini
+   @welllucky:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+   ```
+
+3. Exporte o token e instale:
+
+   ```sh
+   export NPM_TOKEN=ghp_...   # token com read:packages
+   pnpm add @welllucky/luck-styles @welllucky/luck-react   # ou luck-angular / luck-vue / luck-core
+   ```
+
+**Na CI do app** (GitHub Actions): em **Package settings → Manage Actions access** de cada pacote, dê acesso de leitura ao repositório do app. Aí o `GITHUB_TOKEN` do workflow basta:
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    registry-url: https://npm.pkg.github.com
+    scope: "@welllucky"
+- run: pnpm install --frozen-lockfile
+  env:
+    NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Licença
 

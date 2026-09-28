@@ -18,23 +18,23 @@ Os componentes são escritos **uma vez** em [Stencil](https://stenciljs.com) com
 
 | Pacote          | Para quê                                                                                   |
 | --------------- | ------------------------------------------------------------------------------------------ |
-| `@luck/tokens`  | Cores, tipografia, espaçamento, raios, sombras e movimento em CSS, JS/TS e JSON            |
-| `@luck/styles`  | `global.css`: fontes auto-hospedadas, tokens, base do documento e utilitários `luck-*`     |
-| `@luck/core`    | Web Components `<luck-*>` (Shadow DOM, formulários nativos, SSR via `hydrate`)             |
-| `@luck/react`   | Componentes React tipados (`<LuckButton>`), com eventos `onLuckChange`                     |
-| `@luck/angular` | Componentes standalone e adaptadores para `ngModel` / Reactive Forms                       |
-| `@luck/vue`     | Componentes Vue 3 com `v-model`                                                            |
+| `@welllucky/luck-tokens`  | Cores, tipografia, espaçamento, raios, sombras e movimento em CSS, JS/TS e JSON            |
+| `@welllucky/luck-styles`  | `global.css`: fontes auto-hospedadas, tokens, base do documento e utilitários `luck-*`     |
+| `@welllucky/luck-core`    | Web Components `<luck-*>` (Shadow DOM, formulários nativos, SSR via `hydrate`)             |
+| `@welllucky/luck-react`   | Componentes React tipados (`<LuckButton>`), com eventos `onLuckChange`                     |
+| `@welllucky/luck-angular` | Componentes standalone e adaptadores para `ngModel` / Reactive Forms                       |
+| `@welllucky/luck-vue`     | Componentes Vue 3 com `v-model`                                                            |
 
 ## Começando
 
 ```css
 /* Uma vez, na entrada da aplicação */
-@import "@luck/styles/global.css";
+@import "@welllucky/luck-styles/global.css";
 ```
 
 ```ts
 // Com bundler: registre os componentes que usar
-import { defineCustomElementLuckButton } from "@luck/core/components";
+import { defineCustomElementLuckButton } from "@welllucky/luck-core/components";
 defineCustomElementLuckButton();
 ```
 

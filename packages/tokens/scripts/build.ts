@@ -16,7 +16,7 @@ import {
 } from "../src/index.ts";
 
 const dist = new URL("../dist/", import.meta.url);
-const HEADER = "/* Gerado por @luck/tokens — não edite. Fonte: packages/tokens/src/index.ts */\n";
+const HEADER = "/* Gerado por @welllucky/luck-tokens — não edite. Fonte: packages/tokens/src/index.ts */\n";
 
 const ref = (v: string | number) => String(v).replace(/^\{([a-z]+)\.([a-z0-9]+)\}$/, "var(--$1-$2)");
 const decls = (entries: [string, string | number][], indent = "  ") =>
@@ -118,4 +118,4 @@ await writeFile(new URL("tokens.json", dist), `${JSON.stringify(json, null, 2)}\
 // Sanidade: toda referência precisa existir na paleta.
 for (const t of Object.values(themes)) for (const v of Object.values(t)) resolveColor(v);
 
-console.log(`@luck/tokens: ${Object.keys(files).length} arquivos CSS + tokens.css + tokens.json`);
+console.log(`@welllucky/luck-tokens: ${Object.keys(files).length} arquivos CSS + tokens.css + tokens.json`);

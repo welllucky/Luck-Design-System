@@ -716,7 +716,7 @@ export namespace Components {
     }
     /**
      * Aviso curto e humano: "Mensagem enviada · Respondo em até 2 dias úteis." A barra inferior conta o
-     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@luck/core`.
+     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@welllucky/luck-core`.
      */
     interface LuckToast {
         /**
@@ -1209,7 +1209,7 @@ declare global {
     }
     /**
      * Aviso curto e humano: "Mensagem enviada · Respondo em até 2 dias úteis." A barra inferior conta o
-     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@luck/core`.
+     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@welllucky/luck-core`.
      */
     interface HTMLLuckToastElement extends Components.LuckToast, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLuckToastElementEventMap>(type: K, listener: (this: HTMLLuckToastElement, ev: LuckToastCustomEvent<HTMLLuckToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2035,7 +2035,7 @@ declare namespace LocalJSX {
     }
     /**
      * Aviso curto e humano: "Mensagem enviada · Respondo em até 2 dias úteis." A barra inferior conta o
-     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@luck/core`.
+     * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@welllucky/luck-core`.
      */
     interface LuckToast {
         /**
@@ -2428,7 +2428,7 @@ declare module "@stencil/core" {
             "luck-timeline": LocalJSX.IntrinsicElements["luck-timeline"] & JSXBase.HTMLAttributes<HTMLLuckTimelineElement>;
             /**
              * Aviso curto e humano: "Mensagem enviada · Respondo em até 2 dias úteis." A barra inferior conta o
-             * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@luck/core`.
+             * tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@welllucky/luck-core`.
              */
             "luck-toast": LocalJSX.IntrinsicElements["luck-toast"] & JSXBase.HTMLAttributes<HTMLLuckToastElement>;
             /**

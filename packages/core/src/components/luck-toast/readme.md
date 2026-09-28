@@ -8,7 +8,7 @@
 ## Overview
 
 Aviso curto e humano: "Mensagem enviada · Respondo em até 2 dias úteis." A barra inferior conta o
-tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@luck/core`.
+tempo e pausa no hover. Para empilhar avisos na tela, use `showToast()` de `@welllucky/luck-core`.
 
 ## Properties
 

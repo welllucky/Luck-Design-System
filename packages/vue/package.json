@@ -1,8 +1,21 @@
 {
-  "name": "@luck/vue",
+  "name": "@welllucky/luck-vue",
   "version": "0.1.0",
-  "description": "Componentes Vue 3 do Luck (gerados a partir de @luck/core), com v-model.",
+  "description": "Componentes Vue 3 do Luck (gerados a partir de @welllucky/luck-core), com v-model.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welllucky/Luck-Design-System.git",
+    "directory": "packages/vue"
+  },
+  "homepage": "https://github.com/welllucky/Luck-Design-System#readme",
+  "bugs": {
+    "url": "https://github.com/welllucky/Luck-Design-System/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [
@@ -22,7 +35,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@luck/core": "workspace:*",
+    "@welllucky/luck-core": "workspace:^",
     "@stencil/vue-output-target": "0.14.3"
   },
   "peerDependencies": {

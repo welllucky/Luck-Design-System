@@ -7,7 +7,7 @@ import { basename, dirname, join } from "node:path";
 const require = createRequire(import.meta.url);
 const dist = new URL("../dist/", import.meta.url);
 const SUBSETS = ["latin", "latin-ext"];
-const HEADER = "/* Gerado por @luck/styles — não edite. Fonte: packages/styles/src */\n";
+const HEADER = "/* Gerado por @welllucky/luck-styles — não edite. Fonte: packages/styles/src */\n";
 
 async function fontFaces(pkg: string): Promise<string> {
   const cssPath = require.resolve(`${pkg}/index.css`);
@@ -36,10 +36,10 @@ const fonts = [
   await fontFaces("@fontsource-variable/manrope"),
   await fontFaces("@fontsource-variable/jetbrains-mono"),
 ].join("\n\n");
-const tokens = await readFile(require.resolve("@luck/tokens/tokens.css"), "utf8");
+const tokens = await readFile(require.resolve("@welllucky/luck-tokens/tokens.css"), "utf8");
 const base = await readFile(new URL("../src/base.css", import.meta.url), "utf8");
 
 await writeFile(new URL("fonts.css", dist), `${HEADER}${fonts}\n`);
 await writeFile(new URL("base.css", dist), HEADER + base);
 await writeFile(new URL("global.css", dist), `${HEADER}${fonts}\n\n${tokens}\n${base}`);
-console.log("@luck/styles: global.css, base.css, fonts.css");
+console.log("@welllucky/luck-styles: global.css, base.css, fonts.css");

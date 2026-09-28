@@ -36,8 +36,8 @@ COPY apps/storybook/package.json apps/storybook/
 
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --frozen-lockfile \
-      --filter @luck/storybook... \
-      --filter @luck/core...
+      --filter @welllucky/luck-storybook... \
+      --filter @welllucky/luck-core...
 
 # 2) Código-fonte e build: tokens → styles → core → Storybook.
 COPY packages/tokens packages/tokens
@@ -46,7 +46,7 @@ COPY packages/core packages/core
 COPY apps/storybook apps/storybook
 
 RUN pnpm build:core \
- && pnpm --filter @luck/storybook build
+ && pnpm --filter @welllucky/luck-storybook build
 
 # ---------- runtime ----------
 FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS runtime

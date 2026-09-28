@@ -1,8 +1,21 @@
 {
-  "name": "@luck/core",
+  "name": "@welllucky/luck-core",
   "version": "0.1.0",
   "description": "Web Components do design system WL3, escritos uma vez em Stencil e consumidos por qualquer framework.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welllucky/Luck-Design-System.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/welllucky/Luck-Design-System#readme",
+  "bugs": {
+    "url": "https://github.com/welllucky/Luck-Design-System/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "type": "module",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.js",
@@ -76,7 +89,7 @@
     "@stencil/vue-output-target": "0.14.3",
     "@types/jest": "29.5.14",
     "@types/node": "^24.0.0",
-    "@luck/tokens": "workspace:*",
+    "@welllucky/luck-tokens": "workspace:*",
     "jest": "29.7.0",
     "jest-cli": "29.7.0",
     "typescript": "~6.0.3"

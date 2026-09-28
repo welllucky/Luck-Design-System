@@ -1,5 +1,5 @@
 {
-  "name": "@luck/storybook",
+  "name": "@welllucky/luck-storybook",
   "version": "0.0.0",
   "private": true,
   "description": "Documentação visual do Luck.",
@@ -13,9 +13,9 @@
     "test:usabilidade": "vitest run --project usabilidade"
   },
   "dependencies": {
-    "@luck/core": "workspace:*",
-    "@luck/styles": "workspace:*",
-    "@luck/tokens": "workspace:*",
+    "@welllucky/luck-core": "workspace:*",
+    "@welllucky/luck-styles": "workspace:*",
+    "@welllucky/luck-tokens": "workspace:*",
     "lucide": "1.47.0"
   },
   "devDependencies": {

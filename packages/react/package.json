@@ -1,8 +1,21 @@
 {
-  "name": "@luck/react",
+  "name": "@welllucky/luck-react",
   "version": "0.1.0",
-  "description": "Componentes React do Luck (gerados a partir de @luck/core).",
+  "description": "Componentes React do Luck (gerados a partir de @welllucky/luck-core).",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welllucky/Luck-Design-System.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/welllucky/Luck-Design-System#readme",
+  "bugs": {
+    "url": "https://github.com/welllucky/Luck-Design-System/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [
@@ -22,7 +35,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@luck/core": "workspace:*",
+    "@welllucky/luck-core": "workspace:^",
     "@stencil/react-output-target": "1.6.2"
   },
   "peerDependencies": {

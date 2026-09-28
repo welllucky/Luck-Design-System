@@ -181,13 +181,13 @@ importers:
 
   apps/storybook:
     dependencies:
-      '@luck/core':
+      '@welllucky/luck-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@luck/styles':
+      '@welllucky/luck-styles':
         specifier: workspace:*
         version: link:../../packages/styles
-      '@luck/tokens':
+      '@welllucky/luck-tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
       lucide:
@@ -245,7 +245,7 @@ importers:
 
   packages/angular:
     dependencies:
-      '@luck/core':
+      '@welllucky/luck-core':
         specifier: workspace:*
         version: link:../core
       tslib:
@@ -290,9 +290,6 @@ importers:
         specifier: 1.47.0
         version: 1.47.0
     devDependencies:
-      '@luck/tokens':
-        specifier: workspace:*
-        version: link:../tokens
       '@stencil/angular-output-target':
         specifier: 1.5.0
         version: 1.5.0(@stencil/core@4.45.0)
@@ -311,6 +308,9 @@ importers:
       '@types/node':
         specifier: ^24.0.0
         version: 24.13.6
+      '@welllucky/luck-tokens':
+        specifier: workspace:*
+        version: link:../tokens
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@24.13.6)(supports-color@8.1.1)
@@ -323,12 +323,12 @@ importers:
 
   packages/react:
     dependencies:
-      '@luck/core':
-        specifier: workspace:*
-        version: link:../core
       '@stencil/react-output-target':
         specifier: 1.6.2
         version: 1.6.2(@stencil/core@4.45.0)(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@welllucky/luck-core':
+        specifier: workspace:^
+        version: link:../core
     devDependencies:
       '@types/react':
         specifier: ^19.2.0
@@ -348,8 +348,8 @@ importers:
 
   packages/styles:
     dependencies:
-      '@luck/tokens':
-        specifier: workspace:*
+      '@welllucky/luck-tokens':
+        specifier: workspace:^
         version: link:../tokens
     devDependencies:
       '@fontsource-variable/jetbrains-mono':
@@ -373,12 +373,12 @@ importers:
 
   packages/vue:
     dependencies:
-      '@luck/core':
-        specifier: workspace:*
-        version: link:../core
       '@stencil/vue-output-target':
         specifier: 0.14.3
         version: 0.14.3(@stencil/core@4.45.0)(vue-router@4.6.4(vue@3.5.43(typescript@6.0.3)))(vue@3.5.43(typescript@6.0.3))
+      '@welllucky/luck-core':
+        specifier: workspace:^
+        version: link:../core
     devDependencies:
       typescript:
         specifier: ~6.0.3

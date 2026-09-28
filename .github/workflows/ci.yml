@@ -41,13 +41,13 @@ jobs:
         run: pnpm test:unit
 
       - name: Navegador dos testes (Playwright)
-        run: pnpm --filter @luck/storybook exec playwright install --with-deps chromium
+        run: pnpm --filter @welllucky/luck-storybook exec playwright install --with-deps chromium
 
       - name: Testes de histórias e usabilidade (Vitest + Storybook)
         run: pnpm test:storybook
 
       - name: Build do Storybook
-        run: pnpm --filter @luck/storybook build
+        run: pnpm --filter @welllucky/luck-storybook build
 
       - uses: actions/upload-artifact@v4
         with:

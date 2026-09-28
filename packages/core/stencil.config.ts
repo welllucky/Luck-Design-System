@@ -41,7 +41,7 @@ export const config: Config = {
     { type: "docs-readme", footer: "" },
     reactOutputTarget({ outDir: "../react/src/generated", esModules: true }),
     angularOutputTarget({
-      componentCorePackage: "@luck/core",
+      componentCorePackage: "@welllucky/luck-core",
       directivesProxyFile: "../angular/src/generated/components.ts",
       directivesArrayFile: "../angular/src/generated/directives.ts",
       outputType: "standalone",
@@ -50,7 +50,7 @@ export const config: Config = {
       booleanAttributes: true,
     }),
     vueOutputTarget({
-      componentCorePackage: "@luck/core",
+      componentCorePackage: "@welllucky/luck-core",
       proxiesFile: "../vue/src/generated/components.ts",
       includeImportCustomElements: true,
       componentModels,

@@ -1,8 +1,21 @@
 {
-  "name": "@luck/styles",
+  "name": "@welllucky/luck-styles",
   "version": "0.1.0",
   "description": "CSS global do WL3: fontes auto-hospedadas, tokens e base do documento.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welllucky/Luck-Design-System.git",
+    "directory": "packages/styles"
+  },
+  "homepage": "https://github.com/welllucky/Luck-Design-System#readme",
+  "bugs": {
+    "url": "https://github.com/welllucky/Luck-Design-System/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -21,7 +34,7 @@
     "build": "rm -rf dist && node scripts/build.ts"
   },
   "dependencies": {
-    "@luck/tokens": "workspace:*"
+    "@welllucky/luck-tokens": "workspace:^"
   },
   "devDependencies": {
     "@fontsource-variable/jetbrains-mono": "5.3.0",
