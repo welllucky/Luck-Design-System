@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import { expect, userEvent, waitFor } from "storybook/test";
-import { deepActive, listen, part, parts, press, ready } from "../support/dom";
+import { deepActive, listen, part, parts, press, ready, readyAll } from "../support/dom";
 
 const meta: Meta = {
   title: "Componentes/Navegação",
@@ -113,4 +113,67 @@ export const TabsLarguraTotal: Story = {
       <luck-tab value="anual" label="Anual"></luck-tab>
     </luck-tabs>
   `,
+};
+
+const secoes = JSON.stringify([
+  { label: "Início", href: "#inicio", icon: "sun" },
+  { label: "Projetos", href: "#projetos", icon: "palette" },
+  { label: "Conhecimentos", href: "#conhecimentos", icon: "sparkles" },
+  { label: "Contato", href: "#contato", icon: "mail" },
+]);
+
+export const NavRail: Story = {
+  name: "Nav rail",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Navegação de primeiro nível entre seções do produto: ícone e rótulo curto, seção aberta com `aria-current` e traço âmbar. Com `orientation="auto"` (padrão), é vertical e vira barra horizontal até 700 px; os slots `start` e `end` aparecem só no trilho vertical. Para SPA, chame `preventDefault()` em `luckNavigate`.',
+      },
+    },
+  },
+  render: () => html`
+    <div class="sb-row" style="align-items:stretch">
+      <div style="height:420px">
+        <luck-nav-rail items=${secoes} active="#projetos" orientation="vertical" label="Seções">
+          <luck-logo slot="start" variant="symbol" size="28"></luck-logo>
+          <luck-icon-button slot="end" icon="sun" label="Tema" variant="ghost" size="sm"></luck-icon-button>
+        </luck-nav-rail>
+      </div>
+      <div style="flex:1 1 320px;align-self:end">
+        <luck-nav-rail
+          items=${secoes}
+          active="#inicio"
+          orientation="horizontal"
+          label="Seções (barra inferior)"
+          @luckNavigate=${(e: CustomEvent) => e.preventDefault()}
+        ></luck-nav-rail>
+      </div>
+    </div>
+  `,
+  play: async ({ canvasElement, step }) => {
+    const [vertical, horizontal] = await readyAll<HTMLLuckNavRailElement>(canvasElement, "luck-nav-rail");
+
+    await step("nav nomeado com um link por seção e a aberta marcada", async () => {
+      await expect(part(vertical, "nav")).toHaveAccessibleName("Seções");
+      const links = parts<HTMLAnchorElement>(vertical, "a.item");
+      await expect(links).toHaveLength(4);
+      await expect(links[1]).toHaveAttribute("aria-current", "page");
+      await expect(links[0]).not.toHaveAttribute("aria-current");
+      await expect(links[1]).toHaveAccessibleName("Projetos");
+    });
+    await step("orientação refletida; slots start e end somem na barra", async () => {
+      await expect(vertical).toHaveAttribute("orientation", "vertical");
+      await expect(horizontal).toHaveAttribute("orientation", "horizontal");
+      await expect(getComputedStyle(part(horizontal, ".start")).display).toBe("none");
+      await expect(getComputedStyle(part(vertical, ".start")).display).not.toBe("none");
+    });
+    await step("clique emite luckNavigate cancelável (SPA)", async () => {
+      const events = listen<{ value: string }>(horizontal, "luckNavigate");
+      const before = location.hash;
+      await userEvent.click(parts(horizontal, "a.item")[3]);
+      await expect(events.at(-1)?.detail.value).toBe("#contato");
+      await expect(location.hash).toBe(before);
+    });
+  },
 };

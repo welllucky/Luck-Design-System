@@ -35,10 +35,12 @@
  - [luck-button](../luck-button)
  - [luck-icon-button](../luck-icon-button)
  - [luck-input](../luck-input)
+ - [luck-nav-rail](../luck-nav-rail)
  - [luck-navbar](../luck-navbar)
  - [luck-project-card](../luck-project-card)
  - [luck-select](../luck-select)
  - [luck-skill-list](../luck-skill-list)
+ - [luck-stat](../luck-stat)
  - [luck-textarea](../luck-textarea)
  - [luck-toast](../luck-toast)
 
@@ -49,10 +51,12 @@ graph TD;
   luck-button --> luck-icon
   luck-icon-button --> luck-icon
   luck-input --> luck-icon
+  luck-nav-rail --> luck-icon
   luck-navbar --> luck-icon
   luck-project-card --> luck-icon
   luck-select --> luck-icon
   luck-skill-list --> luck-icon
+  luck-stat --> luck-icon
   luck-textarea --> luck-icon
   luck-toast --> luck-icon
   style luck-icon fill:#f9f,stroke:#333,stroke-width:4px

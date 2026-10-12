@@ -1,0 +1,78 @@
+@import "../../styles/shared.css";
+
+:host {
+  --_tone: var(--accent);
+  display: block;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+:host([tone="company"]) {
+  --_tone: var(--signal-company);
+}
+
+:host([tone="knowledge"]) {
+  --_tone: var(--signal-knowledge);
+}
+
+:host([tone="danger"]) {
+  --_tone: var(--danger);
+}
+
+:host([tone="neutral"]) {
+  --_tone: var(--fg-muted);
+}
+
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-block-end: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--fg);
+}
+
+/* Poço rebaixado com a barra no tom; raio ≈ altura ÷ 10. */
+meter {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 8px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--well);
+  box-shadow: var(--shadow-well);
+}
+
+meter::-webkit-meter-bar {
+  height: 8px;
+  border: 0;
+  border-radius: inherit;
+  background: var(--well);
+  box-shadow: var(--shadow-well);
+}
+
+meter::-webkit-meter-optimum-value,
+meter::-webkit-meter-suboptimum-value,
+meter::-webkit-meter-even-less-good-value {
+  border-radius: inherit;
+  background: var(--_tone);
+}
+
+meter::-moz-meter-bar {
+  border-radius: inherit;
+  background: var(--_tone);
+}
+
+@media (forced-colors: active) {
+  meter {
+    border: 1px solid CanvasText;
+  }
+}

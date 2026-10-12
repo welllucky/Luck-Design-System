@@ -1,4 +1,5 @@
 export type * from "./components";
+export type { NavRailItem } from "./components/luck-nav-rail/luck-nav-rail";
 export type { NavLink } from "./components/luck-navbar/luck-navbar";
 export type { SelectOption } from "./components/luck-select/luck-select";
 export type { SkillItem } from "./components/luck-skill-list/luck-skill-list";

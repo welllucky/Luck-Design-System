@@ -5,12 +5,16 @@ import { LuckCard } from "../components/luck-card/luck-card";
 import { LuckCheckbox } from "../components/luck-checkbox/luck-checkbox";
 import { LuckIcon } from "../components/luck-icon/luck-icon";
 import { LuckLogo } from "../components/luck-logo/luck-logo";
+import { LuckMessage } from "../components/luck-message/luck-message";
+import { LuckMeter } from "../components/luck-meter/luck-meter";
+import { LuckNavRail } from "../components/luck-nav-rail/luck-nav-rail";
 import { LuckSelect } from "../components/luck-select/luck-select";
+import { LuckStat } from "../components/luck-stat/luck-stat";
 import { LuckTab } from "../components/luck-tab/luck-tab";
 import { LuckTabs } from "../components/luck-tabs/luck-tabs";
 import { toKebab } from "../icons/registry";
 import { check } from "../utils/field";
-import { parseList } from "../utils/utils";
+import { parseList, safeHref } from "../utils/utils";
 
 describe("utils", () => {
   it("parseList aceita array, JSON e lista separada por vírgulas", () => {
@@ -33,6 +37,17 @@ describe("utils", () => {
       error: "E-mail inválido",
     });
     expect(check(() => false, "x").error).toBe("Confira este campo.");
+  });
+
+  it("safeHref aceita caminhos e http(s) e recusa esquemas perigosos", () => {
+    expect(safeHref("/projetos")).toBe("/projetos");
+    expect(safeHref("#fontes")).toBe("#fontes");
+    expect(safeHref("https://example.com/x")).toBe("https://example.com/x");
+    expect(safeHref("javascript:alert(1)")).toBeUndefined();
+    expect(safeHref("data:text/html,x")).toBeUndefined();
+    expect(safeHref("//evil.test")).toBeUndefined();
+    expect(safeHref("/\\evil.test")).toBeUndefined();
+    expect(safeHref(undefined)).toBeUndefined();
   });
 });
 
@@ -170,5 +185,141 @@ describe("luck-select", () => {
     const options = page.root!.shadowRoot!.querySelectorAll("option");
     expect(options.length).toBe(2);
     expect(page.root!.value).toBe("Y");
+  });
+});
+
+describe("luck-nav-rail", () => {
+  const items = JSON.stringify([
+    { label: "Início", href: "/inicio", icon: "sun" },
+    { label: "Projetos", href: "/projetos", icon: "palette" },
+    { label: "Contato", href: "/contato", icon: "mail" },
+  ]);
+
+  it("renderiza um nav nomeado com um link por seção e marca a aberta", async () => {
+    const page = await newSpecPage({
+      components: [LuckNavRail],
+      html: `<luck-nav-rail items='${items}' active="/projetos"></luck-nav-rail>`,
+    });
+    const nav = page.root!.shadowRoot!.querySelector("nav")!;
+    expect(nav.getAttribute("aria-label")).toBe("Navegação principal");
+    expect(page.root!.getAttribute("orientation")).toBe("auto");
+    const links = nav.querySelectorAll("a");
+    expect(links.length).toBe(3);
+    expect(links[0].getAttribute("href")).toBe("/inicio");
+    expect(links[0].querySelector("luck-icon")!.getAttribute("name")).toBe("sun");
+    expect(links[1].getAttribute("aria-current")).toBe("page");
+    expect(links[0].hasAttribute("aria-current")).toBe(false);
+  });
+
+  it("reflete a orientação e emite luckNavigate cancelável", async () => {
+    const page = await newSpecPage({
+      components: [LuckNavRail],
+      html: `<luck-nav-rail items='${items}' orientation="horizontal" label="Seções"></luck-nav-rail>`,
+    });
+    expect(page.root!.getAttribute("orientation")).toBe("horizontal");
+    expect(page.root!.shadowRoot!.querySelector("nav")!.getAttribute("aria-label")).toBe("Seções");
+    const spy = jest.fn((e: Event) => e.preventDefault());
+    page.root!.addEventListener("luckNavigate", spy);
+    (page.root!.shadowRoot!.querySelectorAll("a")[2] as HTMLElement).click();
+    await page.waitForChanges();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect((spy.mock.calls[0][0] as CustomEvent).detail).toEqual({ value: "/contato", href: "/contato" });
+  });
+});
+
+describe("luck-stat", () => {
+  it("vira um link só com título, número, unidade e legenda", async () => {
+    const page = await newSpecPage({
+      components: [LuckStat],
+      html: `<luck-stat heading="Projetos" icon="palette" value="24" unit="publicados" caption="3 em rascunho" href="/projetos"></luck-stat>`,
+    });
+    const link = page.root!.shadowRoot!.querySelector("a")!;
+    expect(link.getAttribute("href")).toBe("/projetos");
+    expect(link.querySelector("luck-icon")!.getAttribute("name")).toBe("palette");
+    const text = link.textContent!.replace(/\s+/g, " ");
+    expect(text).toContain("Projetos");
+    expect(text).toContain("24 publicados");
+    expect(text).toContain("3 em rascunho");
+  });
+
+  it("descarta destinos inseguros e reflete pending", async () => {
+    const page = await newSpecPage({
+      components: [LuckStat],
+      html: `<luck-stat heading="Mau" value="1" href="javascript:alert(1)" pending></luck-stat>`,
+    });
+    expect(page.root!.shadowRoot!.querySelector("a")).toBeNull();
+    expect(page.root!.shadowRoot!.querySelector("div.card")).not.toBeNull();
+    expect(page.root!.hasAttribute("pending")).toBe(true);
+  });
+
+  it("emite luckOpen cancelável ao clicar", async () => {
+    const page = await newSpecPage({
+      components: [LuckStat],
+      html: `<luck-stat heading="Projetos" value="24" href="/projetos"></luck-stat>`,
+    });
+    const spy = jest.fn();
+    page.root!.addEventListener("luckOpen", spy);
+    (page.root!.shadowRoot!.querySelector("a") as HTMLElement).click();
+    await page.waitForChanges();
+    expect(spy.mock.calls[0][0].detail).toEqual({ href: "/projetos" });
+  });
+});
+
+describe("luck-meter", () => {
+  it("expõe o valor como texto e o limita ao intervalo", async () => {
+    const page = await newSpecPage({
+      components: [LuckMeter],
+      html: `<luck-meter label="Projetos com evidência" value="7" max="9" value-text="7 / 9"></luck-meter>`,
+    });
+    const meter = page.root!.shadowRoot!.querySelector("meter")!;
+    expect(meter.getAttribute("aria-label")).toBe("Projetos com evidência");
+    expect(meter.getAttribute("aria-valuetext")).toBe("7 / 9");
+    expect(page.root!.shadowRoot!.querySelector(".label")!.textContent).toContain("Projetos com evidência");
+    expect(page.root!.getAttribute("tone")).toBe("accent");
+
+    page.root!.value = 20;
+    page.root!.valueText = undefined;
+    page.root!.compact = true;
+    await page.waitForChanges();
+    expect(page.root!.shadowRoot!.querySelector(".label")).toBeNull();
+    expect(page.root!.shadowRoot!.querySelector("meter")!.getAttribute("aria-valuetext")).toBe("100%");
+    expect(page.root!.hasAttribute("compact")).toBe(true);
+  });
+
+  it("reflete o tom", async () => {
+    const page = await newSpecPage({
+      components: [LuckMeter],
+      html: `<luck-meter label="Repertório" tone="knowledge" value="3" max="4"></luck-meter>`,
+    });
+    expect(page.root!.getAttribute("tone")).toBe("knowledge");
+    expect(page.root!.shadowRoot!.querySelector("meter")!.getAttribute("aria-valuetext")).toBe("75%");
+  });
+});
+
+describe("luck-message", () => {
+  it("anuncia o autor e mostra as fontes só nas respostas", async () => {
+    const page = await newSpecPage({
+      components: [LuckMessage],
+      html: `<luck-message author="Assistente"><p>Sim.</p><a slot="citations" href="#fonte">Fonte</a></luck-message>`,
+    });
+    const root = page.root!.shadowRoot!;
+    expect(page.root!.getAttribute("from")).toBe("assistant");
+    expect(root.querySelector(".sr-only")!.textContent).toBe("Assistente: ");
+    const group = root.querySelector('[role="group"]')!;
+    expect(group.getAttribute("aria-label")).toBe("Fontes");
+    expect(group.hasAttribute("hidden")).toBe(false);
+
+    page.root!.from = "user";
+    await page.waitForChanges();
+    expect(root.querySelector('[role="group"]')).toBeNull();
+  });
+
+  it("esconde o grupo de fontes quando não há citações", async () => {
+    const page = await newSpecPage({
+      components: [LuckMessage],
+      html: `<luck-message><p>Sem fontes.</p></luck-message>`,
+    });
+    expect(page.root!.shadowRoot!.querySelector('[role="group"]')!.hasAttribute("hidden")).toBe(true);
+    expect(page.root!.shadowRoot!.querySelector(".sr-only")).toBeNull();
   });
 });
