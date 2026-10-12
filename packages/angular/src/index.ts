@@ -1,4 +1,13 @@
-export type { IconNode, NavLink, SelectOption, SkillItem, SocialLink, Theme, TimelineItem } from "@welllucky/luck-core";
+export type {
+  IconNode,
+  NavLink,
+  NavRailItem,
+  SelectOption,
+  SkillItem,
+  SocialLink,
+  Theme,
+  TimelineItem,
+} from "@welllucky/luck-core";
 // Mesma instância do registro de ícones usada pelos componentes (dist/components).
 export {
   getTheme,

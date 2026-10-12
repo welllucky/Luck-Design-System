@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Validator } from "./utils/field";
+import { NavRailItem } from "./components/luck-nav-rail/luck-nav-rail";
 import { NavLink } from "./components/luck-navbar/luck-navbar";
 import { Theme } from "./utils/theme";
 import { SelectOption } from "./components/luck-select/luck-select";
@@ -13,6 +14,7 @@ import { SkillItem } from "./components/luck-skill-list/luck-skill-list";
 import { SocialLink } from "./components/luck-social-links/luck-social-links";
 import { TimelineItem } from "./components/luck-timeline/luck-timeline";
 export { Validator } from "./utils/field";
+export { NavRailItem } from "./components/luck-nav-rail/luck-nav-rail";
 export { NavLink } from "./components/luck-navbar/luck-navbar";
 export { Theme } from "./utils/theme";
 export { SelectOption } from "./components/luck-select/luck-select";
@@ -410,6 +412,89 @@ export namespace Components {
         "variant": "symbol" | "horizontal" | "stacked" | "signature" | "wordmark" | "app-icon";
     }
     /**
+     * Mensagem de uma conversa, como as de um assistente. A pergunta (`from="user"`) alinha à direita; a resposta
+     * (`from="assistant"`) alinha à esquerda e mostra, abaixo do texto, as fontes citadas no slot `citations`
+     * (links, `luck-tag` ou `luck-badge`). O autor é lido antes do texto por leitores de tela; ponha a conversa
+     * inteira numa lista ou num contêiner com `role="log"` para que respostas novas sejam anunciadas.
+     */
+    interface LuckMessage {
+        /**
+          * Nome do autor, lido antes da mensagem (ex.: `Você`, `Assistente`).
+          * @default ""
+         */
+        "author": string;
+        /**
+          * Rótulo do grupo de fontes.
+          * @default "Fontes"
+         */
+        "citationsLabel": string;
+        /**
+          * @default "assistant"
+         */
+        "from": "user" | "assistant";
+    }
+    /**
+     * Medidor de uma grandeza num intervalo conhecido (cobertura, aderência, orçamento). Não é progresso de uma
+     * tarefa: usa o `<meter>` nativo, com o texto do valor em `aria-valuetext`. O rótulo fica visível acima da
+     * barra; com `compact`, só o leitor de tela o lê.
+     * `accent` (âmbar) é o padrão; `company` (azul) só para empresas; `knowledge` (roxo) só para conhecimentos;
+     * `danger` para estouro ou erro; `neutral` para o que não tem família.
+     */
+    interface LuckMeter {
+        /**
+          * Esconde rótulo e valor visíveis; a barra mantém o nome acessível.
+          * @default false
+         */
+        "compact": boolean;
+        /**
+          * Nome acessível e rótulo visível do medidor.
+         */
+        "label": string;
+        /**
+          * @default 100
+         */
+        "max": number;
+        /**
+          * @default "accent"
+         */
+        "tone": "accent" | "company" | "knowledge" | "danger" | "neutral";
+        /**
+          * @default 0
+         */
+        "value": number;
+        /**
+          * Texto do valor (ex.: `7 / 9`, `R$ 3,20 de R$ 10`). Padrão: porcentagem.
+         */
+        "valueText"?: string;
+    }
+    /**
+     * Trilho de navegação de primeiro nível: ícone (20 px) e rótulo curto por seção do produto. A seção aberta
+     * leva `aria-current="page"` e o traço âmbar. Com `orientation="auto"`, o trilho é vertical e vira barra
+     * horizontal em telas de até 700 px; `vertical` e `horizontal` fixam o arranjo.
+     * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
+     */
+    interface LuckNavRail {
+        /**
+          * `value` (ou `href`) da seção aberta.
+         */
+        "active"?: string;
+        /**
+          * Seções: `[{ label, href, icon?, value? }]`. Via atributo, em JSON.
+          * @default []
+         */
+        "items": NavRailItem[] | string;
+        /**
+          * Nome acessível do `<nav>`; deve diferir do nome de outras navegações da página.
+          * @default "Navegação principal"
+         */
+        "label": string;
+        /**
+          * `auto` é vertical e vira horizontal em telas de até 700 px.
+          * @default "auto"
+         */
+        "orientation": "auto" | "vertical" | "horizontal";
+    }
+    /**
      * Barra de navegação: logo que "pressiona" no hover, links com traço âmbar, troca de tema em
      * círculo e CTA. Abaixo de 760 px vira menu.
      * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
@@ -609,6 +694,43 @@ export namespace Components {
         "variant": "icon" | "button";
     }
     /**
+     * Métrica em destaque: título curto com ícone Lucide, número com unidade e legenda. Com `href`, o bloco do
+     * título à legenda vira um link só, e o nome acessível junta título, número, unidade e legenda na ordem de
+     * leitura; destinos que não sejam caminho relativo, `http` ou `https` são descartados. `pending` marca o que
+     * ainda não existe (borda tracejada, número esmaecido).
+     */
+    interface LuckStat {
+        /**
+          * Legenda abaixo do valor.
+          * @default ""
+         */
+        "caption": string;
+        "heading": string;
+        /**
+          * Destino da métrica: caminho relativo, `http` ou `https`.
+         */
+        "href"?: string;
+        /**
+          * Ícone Lucide antes do título.
+         */
+        "icon"?: string;
+        /**
+          * Marca uma métrica que ainda não está disponível.
+          * @default false
+         */
+        "pending": boolean;
+        /**
+          * Unidade depois do valor (ex.: `projetos`).
+          * @default ""
+         */
+        "unit": string;
+        /**
+          * Número ou valor principal, já formatado.
+          * @default ""
+         */
+        "value": string;
+    }
+    /**
      * Interruptor: trilho rebaixado e polegar que estica ao pressionar.
      */
     interface LuckSwitch {
@@ -778,6 +900,10 @@ export interface LuckInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLuckInputElement;
 }
+export interface LuckNavRailCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLuckNavRailElement;
+}
 export interface LuckNavbarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLuckNavbarElement;
@@ -801,6 +927,10 @@ export interface LuckSelectCustomEvent<T> extends CustomEvent<T> {
 export interface LuckSkillListCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLuckSkillListElement;
+}
+export interface LuckStatCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLuckStatElement;
 }
 export interface LuckSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -976,6 +1106,54 @@ declare global {
         prototype: HTMLLuckLogoElement;
         new (): HTMLLuckLogoElement;
     };
+    /**
+     * Mensagem de uma conversa, como as de um assistente. A pergunta (`from="user"`) alinha à direita; a resposta
+     * (`from="assistant"`) alinha à esquerda e mostra, abaixo do texto, as fontes citadas no slot `citations`
+     * (links, `luck-tag` ou `luck-badge`). O autor é lido antes do texto por leitores de tela; ponha a conversa
+     * inteira numa lista ou num contêiner com `role="log"` para que respostas novas sejam anunciadas.
+     */
+    interface HTMLLuckMessageElement extends Components.LuckMessage, HTMLStencilElement {
+    }
+    var HTMLLuckMessageElement: {
+        prototype: HTMLLuckMessageElement;
+        new (): HTMLLuckMessageElement;
+    };
+    /**
+     * Medidor de uma grandeza num intervalo conhecido (cobertura, aderência, orçamento). Não é progresso de uma
+     * tarefa: usa o `<meter>` nativo, com o texto do valor em `aria-valuetext`. O rótulo fica visível acima da
+     * barra; com `compact`, só o leitor de tela o lê.
+     * `accent` (âmbar) é o padrão; `company` (azul) só para empresas; `knowledge` (roxo) só para conhecimentos;
+     * `danger` para estouro ou erro; `neutral` para o que não tem família.
+     */
+    interface HTMLLuckMeterElement extends Components.LuckMeter, HTMLStencilElement {
+    }
+    var HTMLLuckMeterElement: {
+        prototype: HTMLLuckMeterElement;
+        new (): HTMLLuckMeterElement;
+    };
+    interface HTMLLuckNavRailElementEventMap {
+        "luckNavigate": { value: string; href?: string };
+    }
+    /**
+     * Trilho de navegação de primeiro nível: ícone (20 px) e rótulo curto por seção do produto. A seção aberta
+     * leva `aria-current="page"` e o traço âmbar. Com `orientation="auto"`, o trilho é vertical e vira barra
+     * horizontal em telas de até 700 px; `vertical` e `horizontal` fixam o arranjo.
+     * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
+     */
+    interface HTMLLuckNavRailElement extends Components.LuckNavRail, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLuckNavRailElementEventMap>(type: K, listener: (this: HTMLLuckNavRailElement, ev: LuckNavRailCustomEvent<HTMLLuckNavRailElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLuckNavRailElementEventMap>(type: K, listener: (this: HTMLLuckNavRailElement, ev: LuckNavRailCustomEvent<HTMLLuckNavRailElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLuckNavRailElement: {
+        prototype: HTMLLuckNavRailElement;
+        new (): HTMLLuckNavRailElement;
+    };
     interface HTMLLuckNavbarElementEventMap {
         "luckNavigate": { value: string; href?: string };
         "luckThemeChange": { theme: Theme };
@@ -1113,6 +1291,29 @@ declare global {
         prototype: HTMLLuckSocialLinksElement;
         new (): HTMLLuckSocialLinksElement;
     };
+    interface HTMLLuckStatElementEventMap {
+        "luckOpen": { href: string };
+    }
+    /**
+     * Métrica em destaque: título curto com ícone Lucide, número com unidade e legenda. Com `href`, o bloco do
+     * título à legenda vira um link só, e o nome acessível junta título, número, unidade e legenda na ordem de
+     * leitura; destinos que não sejam caminho relativo, `http` ou `https` são descartados. `pending` marca o que
+     * ainda não existe (borda tracejada, número esmaecido).
+     */
+    interface HTMLLuckStatElement extends Components.LuckStat, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLuckStatElementEventMap>(type: K, listener: (this: HTMLLuckStatElement, ev: LuckStatCustomEvent<HTMLLuckStatElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLuckStatElementEventMap>(type: K, listener: (this: HTMLLuckStatElement, ev: LuckStatCustomEvent<HTMLLuckStatElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLuckStatElement: {
+        prototype: HTMLLuckStatElement;
+        new (): HTMLLuckStatElement;
+    };
     interface HTMLLuckSwitchElementEventMap {
         "luckChange": { checked: boolean };
     }
@@ -1245,6 +1446,9 @@ declare global {
         "luck-icon-button": HTMLLuckIconButtonElement;
         "luck-input": HTMLLuckInputElement;
         "luck-logo": HTMLLuckLogoElement;
+        "luck-message": HTMLLuckMessageElement;
+        "luck-meter": HTMLLuckMeterElement;
+        "luck-nav-rail": HTMLLuckNavRailElement;
         "luck-navbar": HTMLLuckNavbarElement;
         "luck-project-card": HTMLLuckProjectCardElement;
         "luck-radio": HTMLLuckRadioElement;
@@ -1252,6 +1456,7 @@ declare global {
         "luck-select": HTMLLuckSelectElement;
         "luck-skill-list": HTMLLuckSkillListElement;
         "luck-social-links": HTMLLuckSocialLinksElement;
+        "luck-stat": HTMLLuckStatElement;
         "luck-switch": HTMLLuckSwitchElement;
         "luck-tab": HTMLLuckTabElement;
         "luck-tabs": HTMLLuckTabsElement;
@@ -1683,6 +1888,93 @@ declare namespace LocalJSX {
         "variant"?: "symbol" | "horizontal" | "stacked" | "signature" | "wordmark" | "app-icon";
     }
     /**
+     * Mensagem de uma conversa, como as de um assistente. A pergunta (`from="user"`) alinha à direita; a resposta
+     * (`from="assistant"`) alinha à esquerda e mostra, abaixo do texto, as fontes citadas no slot `citations`
+     * (links, `luck-tag` ou `luck-badge`). O autor é lido antes do texto por leitores de tela; ponha a conversa
+     * inteira numa lista ou num contêiner com `role="log"` para que respostas novas sejam anunciadas.
+     */
+    interface LuckMessage {
+        /**
+          * Nome do autor, lido antes da mensagem (ex.: `Você`, `Assistente`).
+          * @default ""
+         */
+        "author"?: string;
+        /**
+          * Rótulo do grupo de fontes.
+          * @default "Fontes"
+         */
+        "citationsLabel"?: string;
+        /**
+          * @default "assistant"
+         */
+        "from"?: "user" | "assistant";
+    }
+    /**
+     * Medidor de uma grandeza num intervalo conhecido (cobertura, aderência, orçamento). Não é progresso de uma
+     * tarefa: usa o `<meter>` nativo, com o texto do valor em `aria-valuetext`. O rótulo fica visível acima da
+     * barra; com `compact`, só o leitor de tela o lê.
+     * `accent` (âmbar) é o padrão; `company` (azul) só para empresas; `knowledge` (roxo) só para conhecimentos;
+     * `danger` para estouro ou erro; `neutral` para o que não tem família.
+     */
+    interface LuckMeter {
+        /**
+          * Esconde rótulo e valor visíveis; a barra mantém o nome acessível.
+          * @default false
+         */
+        "compact"?: boolean;
+        /**
+          * Nome acessível e rótulo visível do medidor.
+         */
+        "label": string;
+        /**
+          * @default 100
+         */
+        "max"?: number;
+        /**
+          * @default "accent"
+         */
+        "tone"?: "accent" | "company" | "knowledge" | "danger" | "neutral";
+        /**
+          * @default 0
+         */
+        "value"?: number;
+        /**
+          * Texto do valor (ex.: `7 / 9`, `R$ 3,20 de R$ 10`). Padrão: porcentagem.
+         */
+        "valueText"?: string;
+    }
+    /**
+     * Trilho de navegação de primeiro nível: ícone (20 px) e rótulo curto por seção do produto. A seção aberta
+     * leva `aria-current="page"` e o traço âmbar. Com `orientation="auto"`, o trilho é vertical e vira barra
+     * horizontal em telas de até 700 px; `vertical` e `horizontal` fixam o arranjo.
+     * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
+     */
+    interface LuckNavRail {
+        /**
+          * `value` (ou `href`) da seção aberta.
+         */
+        "active"?: string;
+        /**
+          * Seções: `[{ label, href, icon?, value? }]`. Via atributo, em JSON.
+          * @default []
+         */
+        "items"?: NavRailItem[] | string;
+        /**
+          * Nome acessível do `<nav>`; deve diferir do nome de outras navegações da página.
+          * @default "Navegação principal"
+         */
+        "label"?: string;
+        /**
+          * Clique em uma seção. Cancelável: `preventDefault()` impede a navegação nativa.
+         */
+        "onLuckNavigate"?: (event: LuckNavRailCustomEvent<{ value: string; href?: string }>) => void;
+        /**
+          * `auto` é vertical e vira horizontal em telas de até 700 px.
+          * @default "auto"
+         */
+        "orientation"?: "auto" | "vertical" | "horizontal";
+    }
+    /**
      * Barra de navegação: logo que "pressiona" no hover, links com traço âmbar, troca de tema em
      * círculo e CTA. Abaixo de 760 px vira menu.
      * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
@@ -1914,6 +2206,47 @@ declare namespace LocalJSX {
           * @default "icon"
          */
         "variant"?: "icon" | "button";
+    }
+    /**
+     * Métrica em destaque: título curto com ícone Lucide, número com unidade e legenda. Com `href`, o bloco do
+     * título à legenda vira um link só, e o nome acessível junta título, número, unidade e legenda na ordem de
+     * leitura; destinos que não sejam caminho relativo, `http` ou `https` são descartados. `pending` marca o que
+     * ainda não existe (borda tracejada, número esmaecido).
+     */
+    interface LuckStat {
+        /**
+          * Legenda abaixo do valor.
+          * @default ""
+         */
+        "caption"?: string;
+        "heading": string;
+        /**
+          * Destino da métrica: caminho relativo, `http` ou `https`.
+         */
+        "href"?: string;
+        /**
+          * Ícone Lucide antes do título.
+         */
+        "icon"?: string;
+        /**
+          * Clique no link. Cancelável: `preventDefault()` impede a navegação (ex.: roteamento SPA).
+         */
+        "onLuckOpen"?: (event: LuckStatCustomEvent<{ href: string }>) => void;
+        /**
+          * Marca uma métrica que ainda não está disponível.
+          * @default false
+         */
+        "pending"?: boolean;
+        /**
+          * Unidade depois do valor (ex.: `projetos`).
+          * @default ""
+         */
+        "unit"?: string;
+        /**
+          * Número ou valor principal, já formatado.
+          * @default ""
+         */
+        "value"?: string;
     }
     /**
      * Interruptor: trilho rebaixado e polegar que estica ao pressionar.
@@ -2181,6 +2514,25 @@ declare namespace LocalJSX {
         "tagline": string;
         "label": string;
     }
+    interface LuckMessageAttributes {
+        "from": "user" | "assistant";
+        "author": string;
+        "citationsLabel": string;
+    }
+    interface LuckMeterAttributes {
+        "label": string;
+        "value": number;
+        "max": number;
+        "valueText": string;
+        "tone": "accent" | "company" | "knowledge" | "danger" | "neutral";
+        "compact": boolean;
+    }
+    interface LuckNavRailAttributes {
+        "items": NavRailItem[] | string;
+        "active": string;
+        "label": string;
+        "orientation": "auto" | "vertical" | "horizontal";
+    }
     interface LuckNavbarAttributes {
         "links": NavLink[] | string;
         "active": string;
@@ -2242,6 +2594,15 @@ declare namespace LocalJSX {
         "variant": "icon" | "button";
         "size": "sm" | "md" | "lg";
     }
+    interface LuckStatAttributes {
+        "heading": string;
+        "value": string;
+        "unit": string;
+        "caption": string;
+        "icon": string;
+        "href": string;
+        "pending": boolean;
+    }
     interface LuckSwitchAttributes {
         "label": string;
         "checked": boolean;
@@ -2300,6 +2661,9 @@ declare namespace LocalJSX {
         "luck-icon-button": Omit<LuckIconButton, keyof LuckIconButtonAttributes> & { [K in keyof LuckIconButton & keyof LuckIconButtonAttributes]?: LuckIconButton[K] } & { [K in keyof LuckIconButton & keyof LuckIconButtonAttributes as `attr:${K}`]?: LuckIconButtonAttributes[K] } & { [K in keyof LuckIconButton & keyof LuckIconButtonAttributes as `prop:${K}`]?: LuckIconButton[K] } & OneOf<"icon", LuckIconButton["icon"], LuckIconButtonAttributes["icon"]> & OneOf<"label", LuckIconButton["label"], LuckIconButtonAttributes["label"]>;
         "luck-input": Omit<LuckInput, keyof LuckInputAttributes> & { [K in keyof LuckInput & keyof LuckInputAttributes]?: LuckInput[K] } & { [K in keyof LuckInput & keyof LuckInputAttributes as `attr:${K}`]?: LuckInputAttributes[K] } & { [K in keyof LuckInput & keyof LuckInputAttributes as `prop:${K}`]?: LuckInput[K] } & OneOf<"label", LuckInput["label"], LuckInputAttributes["label"]>;
         "luck-logo": Omit<LuckLogo, keyof LuckLogoAttributes> & { [K in keyof LuckLogo & keyof LuckLogoAttributes]?: LuckLogo[K] } & { [K in keyof LuckLogo & keyof LuckLogoAttributes as `attr:${K}`]?: LuckLogoAttributes[K] } & { [K in keyof LuckLogo & keyof LuckLogoAttributes as `prop:${K}`]?: LuckLogo[K] };
+        "luck-message": Omit<LuckMessage, keyof LuckMessageAttributes> & { [K in keyof LuckMessage & keyof LuckMessageAttributes]?: LuckMessage[K] } & { [K in keyof LuckMessage & keyof LuckMessageAttributes as `attr:${K}`]?: LuckMessageAttributes[K] } & { [K in keyof LuckMessage & keyof LuckMessageAttributes as `prop:${K}`]?: LuckMessage[K] };
+        "luck-meter": Omit<LuckMeter, keyof LuckMeterAttributes> & { [K in keyof LuckMeter & keyof LuckMeterAttributes]?: LuckMeter[K] } & { [K in keyof LuckMeter & keyof LuckMeterAttributes as `attr:${K}`]?: LuckMeterAttributes[K] } & { [K in keyof LuckMeter & keyof LuckMeterAttributes as `prop:${K}`]?: LuckMeter[K] } & OneOf<"label", LuckMeter["label"], LuckMeterAttributes["label"]>;
+        "luck-nav-rail": Omit<LuckNavRail, keyof LuckNavRailAttributes> & { [K in keyof LuckNavRail & keyof LuckNavRailAttributes]?: LuckNavRail[K] } & { [K in keyof LuckNavRail & keyof LuckNavRailAttributes as `attr:${K}`]?: LuckNavRailAttributes[K] } & { [K in keyof LuckNavRail & keyof LuckNavRailAttributes as `prop:${K}`]?: LuckNavRail[K] };
         "luck-navbar": Omit<LuckNavbar, keyof LuckNavbarAttributes> & { [K in keyof LuckNavbar & keyof LuckNavbarAttributes]?: LuckNavbar[K] } & { [K in keyof LuckNavbar & keyof LuckNavbarAttributes as `attr:${K}`]?: LuckNavbarAttributes[K] } & { [K in keyof LuckNavbar & keyof LuckNavbarAttributes as `prop:${K}`]?: LuckNavbar[K] };
         "luck-project-card": Omit<LuckProjectCard, keyof LuckProjectCardAttributes> & { [K in keyof LuckProjectCard & keyof LuckProjectCardAttributes]?: LuckProjectCard[K] } & { [K in keyof LuckProjectCard & keyof LuckProjectCardAttributes as `attr:${K}`]?: LuckProjectCardAttributes[K] } & { [K in keyof LuckProjectCard & keyof LuckProjectCardAttributes as `prop:${K}`]?: LuckProjectCard[K] } & OneOf<"heading", LuckProjectCard["heading"], LuckProjectCardAttributes["heading"]>;
         "luck-radio": Omit<LuckRadio, keyof LuckRadioAttributes> & { [K in keyof LuckRadio & keyof LuckRadioAttributes]?: LuckRadio[K] } & { [K in keyof LuckRadio & keyof LuckRadioAttributes as `attr:${K}`]?: LuckRadioAttributes[K] } & { [K in keyof LuckRadio & keyof LuckRadioAttributes as `prop:${K}`]?: LuckRadio[K] } & OneOf<"value", LuckRadio["value"], LuckRadioAttributes["value"]>;
@@ -2307,6 +2671,7 @@ declare namespace LocalJSX {
         "luck-select": Omit<LuckSelect, keyof LuckSelectAttributes> & { [K in keyof LuckSelect & keyof LuckSelectAttributes]?: LuckSelect[K] } & { [K in keyof LuckSelect & keyof LuckSelectAttributes as `attr:${K}`]?: LuckSelectAttributes[K] } & { [K in keyof LuckSelect & keyof LuckSelectAttributes as `prop:${K}`]?: LuckSelect[K] } & OneOf<"label", LuckSelect["label"], LuckSelectAttributes["label"]>;
         "luck-skill-list": Omit<LuckSkillList, keyof LuckSkillListAttributes> & { [K in keyof LuckSkillList & keyof LuckSkillListAttributes]?: LuckSkillList[K] } & { [K in keyof LuckSkillList & keyof LuckSkillListAttributes as `attr:${K}`]?: LuckSkillListAttributes[K] } & { [K in keyof LuckSkillList & keyof LuckSkillListAttributes as `prop:${K}`]?: LuckSkillList[K] };
         "luck-social-links": Omit<LuckSocialLinks, keyof LuckSocialLinksAttributes> & { [K in keyof LuckSocialLinks & keyof LuckSocialLinksAttributes]?: LuckSocialLinks[K] } & { [K in keyof LuckSocialLinks & keyof LuckSocialLinksAttributes as `attr:${K}`]?: LuckSocialLinksAttributes[K] } & { [K in keyof LuckSocialLinks & keyof LuckSocialLinksAttributes as `prop:${K}`]?: LuckSocialLinks[K] };
+        "luck-stat": Omit<LuckStat, keyof LuckStatAttributes> & { [K in keyof LuckStat & keyof LuckStatAttributes]?: LuckStat[K] } & { [K in keyof LuckStat & keyof LuckStatAttributes as `attr:${K}`]?: LuckStatAttributes[K] } & { [K in keyof LuckStat & keyof LuckStatAttributes as `prop:${K}`]?: LuckStat[K] } & OneOf<"heading", LuckStat["heading"], LuckStatAttributes["heading"]>;
         "luck-switch": Omit<LuckSwitch, keyof LuckSwitchAttributes> & { [K in keyof LuckSwitch & keyof LuckSwitchAttributes]?: LuckSwitch[K] } & { [K in keyof LuckSwitch & keyof LuckSwitchAttributes as `attr:${K}`]?: LuckSwitchAttributes[K] } & { [K in keyof LuckSwitch & keyof LuckSwitchAttributes as `prop:${K}`]?: LuckSwitch[K] };
         "luck-tab": Omit<LuckTab, keyof LuckTabAttributes> & { [K in keyof LuckTab & keyof LuckTabAttributes]?: LuckTab[K] } & { [K in keyof LuckTab & keyof LuckTabAttributes as `attr:${K}`]?: LuckTabAttributes[K] } & { [K in keyof LuckTab & keyof LuckTabAttributes as `prop:${K}`]?: LuckTab[K] } & OneOf<"value", LuckTab["value"], LuckTabAttributes["value"]> & OneOf<"label", LuckTab["label"], LuckTabAttributes["label"]>;
         "luck-tabs": Omit<LuckTabs, keyof LuckTabsAttributes> & { [K in keyof LuckTabs & keyof LuckTabsAttributes]?: LuckTabs[K] } & { [K in keyof LuckTabs & keyof LuckTabsAttributes as `attr:${K}`]?: LuckTabsAttributes[K] } & { [K in keyof LuckTabs & keyof LuckTabsAttributes as `prop:${K}`]?: LuckTabs[K] };
@@ -2370,6 +2735,28 @@ declare module "@stencil/core" {
              */
             "luck-logo": LocalJSX.IntrinsicElements["luck-logo"] & JSXBase.HTMLAttributes<HTMLLuckLogoElement>;
             /**
+             * Mensagem de uma conversa, como as de um assistente. A pergunta (`from="user"`) alinha à direita; a resposta
+             * (`from="assistant"`) alinha à esquerda e mostra, abaixo do texto, as fontes citadas no slot `citations`
+             * (links, `luck-tag` ou `luck-badge`). O autor é lido antes do texto por leitores de tela; ponha a conversa
+             * inteira numa lista ou num contêiner com `role="log"` para que respostas novas sejam anunciadas.
+             */
+            "luck-message": LocalJSX.IntrinsicElements["luck-message"] & JSXBase.HTMLAttributes<HTMLLuckMessageElement>;
+            /**
+             * Medidor de uma grandeza num intervalo conhecido (cobertura, aderência, orçamento). Não é progresso de uma
+             * tarefa: usa o `<meter>` nativo, com o texto do valor em `aria-valuetext`. O rótulo fica visível acima da
+             * barra; com `compact`, só o leitor de tela o lê.
+             * `accent` (âmbar) é o padrão; `company` (azul) só para empresas; `knowledge` (roxo) só para conhecimentos;
+             * `danger` para estouro ou erro; `neutral` para o que não tem família.
+             */
+            "luck-meter": LocalJSX.IntrinsicElements["luck-meter"] & JSXBase.HTMLAttributes<HTMLLuckMeterElement>;
+            /**
+             * Trilho de navegação de primeiro nível: ícone (20 px) e rótulo curto por seção do produto. A seção aberta
+             * leva `aria-current="page"` e o traço âmbar. Com `orientation="auto"`, o trilho é vertical e vira barra
+             * horizontal em telas de até 700 px; `vertical` e `horizontal` fixam o arranjo.
+             * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
+             */
+            "luck-nav-rail": LocalJSX.IntrinsicElements["luck-nav-rail"] & JSXBase.HTMLAttributes<HTMLLuckNavRailElement>;
+            /**
              * Barra de navegação: logo que "pressiona" no hover, links com traço âmbar, troca de tema em
              * círculo e CTA. Abaixo de 760 px vira menu.
              * Para navegação SPA, chame `preventDefault()` em `luckNavigate` e roteie você mesmo.
@@ -2401,6 +2788,13 @@ declare module "@stencil/core" {
              * Redes sociais como teclas de ícone (com dica) ou botões com rótulo.
              */
             "luck-social-links": LocalJSX.IntrinsicElements["luck-social-links"] & JSXBase.HTMLAttributes<HTMLLuckSocialLinksElement>;
+            /**
+             * Métrica em destaque: título curto com ícone Lucide, número com unidade e legenda. Com `href`, o bloco do
+             * título à legenda vira um link só, e o nome acessível junta título, número, unidade e legenda na ordem de
+             * leitura; destinos que não sejam caminho relativo, `http` ou `https` são descartados. `pending` marca o que
+             * ainda não existe (borda tracejada, número esmaecido).
+             */
+            "luck-stat": LocalJSX.IntrinsicElements["luck-stat"] & JSXBase.HTMLAttributes<HTMLLuckStatElement>;
             /**
              * Interruptor: trilho rebaixado e polegar que estica ao pressionar.
              */

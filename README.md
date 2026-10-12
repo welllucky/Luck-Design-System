@@ -10,7 +10,7 @@ A linguagem é a releitura **V4 · Tátil**: botões são teclas que afundam, ca
 | --- | --- |
 | [`@welllucky/luck-tokens`](packages/tokens) | Fonte única dos tokens (`src/index.ts`) → CSS (`tokens.css`, `css/*.css`), JS/TS e `tokens.json` |
 | [`@welllucky/luck-styles`](packages/styles) | `global.css`: fontes auto-hospedadas (Manrope, JetBrains Mono) + tokens + base do documento e utilitários `luck-*` |
-| [`@welllucky/luck-core`](packages/core) | 25 Web Components `<luck-*>` com Shadow DOM, formulários nativos (ElementInternals), SSR (`/hydrate`) e `custom-elements.json` |
+| [`@welllucky/luck-core`](packages/core) | 29 Web Components `<luck-*>` com Shadow DOM, formulários nativos (ElementInternals), SSR (`/hydrate`) e `custom-elements.json` |
 | [`@welllucky/luck-react`](packages/react) | Componentes React gerados (`<LuckButton onLuckChange>`) |
 | [`@welllucky/luck-angular`](packages/angular) | Componentes standalone + adaptadores `ngModel` / Reactive Forms |
 | [`@welllucky/luck-vue`](packages/vue) | Componentes Vue 3 com `v-model` |
@@ -24,8 +24,8 @@ A linguagem é a releitura **V4 · Tátil**: botões são teclas que afundam, ca
 | --- | --- |
 | Ações | `luck-button`, `luck-icon-button` |
 | Formulários | `luck-input`, `luck-textarea`, `luck-select`, `luck-checkbox`, `luck-radio-group` + `luck-radio`, `luck-switch` |
-| Exibição | `luck-badge`, `luck-tag`, `luck-avatar`, `luck-card`, `luck-icon` |
-| Navegação | `luck-navbar`, `luck-tabs` + `luck-tab` |
+| Exibição | `luck-badge`, `luck-tag`, `luck-avatar`, `luck-card`, `luck-icon`, `luck-stat`, `luck-meter`, `luck-message` |
+| Navegação | `luck-navbar`, `luck-nav-rail`, `luck-tabs` + `luck-tab` |
 | Feedback | `luck-dialog`, `luck-toast` (+ `showToast()`), `luck-tooltip` |
 | Marca | `luck-logo` |
 | Portfólio | `luck-project-card`, `luck-timeline`, `luck-skill-list`, `luck-social-links` |

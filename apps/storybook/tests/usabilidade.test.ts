@@ -26,6 +26,16 @@ const FORM = `
   </form>
 `;
 
+const RAIL = `
+  <luck-nav-rail label="Seções" active="#projetos" items='[
+    {"label":"Início","href":"#inicio","icon":"sun"},
+    {"label":"Projetos","href":"#projetos","icon":"palette"},
+    {"label":"Contato","href":"#contato","icon":"mail"}
+  ]'></luck-nav-rail>
+`;
+
+const STAT = `<luck-stat heading="Projetos" icon="palette" value="24" unit="publicados" caption="3 em rascunho" href="#projetos"></luck-stat>`;
+
 grupo("teclado", () => {
   it("Tab percorre o formulário na ordem visual, com uma parada por grupo de radio", async () => {
     await mount(FORM);
@@ -99,6 +109,26 @@ grupo("teclado", () => {
     await userEvent.tab();
     expect(activeHost()).toBe(root.querySelector('luck-tab[value="c"]'));
   });
+  it("nav rail: Tab passa pelas seções na ordem e Enter emite luckNavigate", async () => {
+    const root = await mount(`${RAIL}${STAT}`);
+    const rail = root.querySelector<HTMLLuckNavRailElement>("luck-nav-rail")!;
+    const stat = root.querySelector<HTMLLuckStatElement>("luck-stat")!;
+    const navigated: string[] = [];
+    rail.addEventListener("luckNavigate", (e) => {
+      e.preventDefault();
+      navigated.push((e as CustomEvent<{ value: string }>).detail.value);
+    });
+    stat.addEventListener("luckOpen", (e) => e.preventDefault());
+    const order: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      await userEvent.tab();
+      order.push(deepActive()?.textContent?.trim().replace(/\s+/g, " ") ?? "(nada)");
+    }
+    expect(order, order.join(" → ")).toEqual(["Início", "Projetos", "Contato", "Projetos24 publicados3 em rascunho"]);
+    await userEvent.tab({ shift: true });
+    await userEvent.keyboard("{Enter}");
+    await expect.poll(() => navigated.at(-1)).toBe("#contato");
+  });
 });
 
 grupo("foco", () => {
@@ -127,6 +157,21 @@ grupo("foco", () => {
       if (!visible) {
         const s = getComputedStyle(el);
         semIndicador.push(`${describe(activeHost())} (outline: ${s.outline}; box-shadow: ${s.boxShadow})`);
+      }
+    }
+    expect(semIndicador, semIndicador.join("\n")).toEqual([]);
+  });
+
+  it("links do nav rail e do stat mostram anel de foco", async () => {
+    await commands.emulateReducedMotion(true);
+    await mount(`${RAIL}${STAT}`);
+    const semIndicador: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      await userEvent.tab();
+      const el = deepActive() as HTMLElement;
+      const s = getComputedStyle(el);
+      if (s.outlineStyle === "none" || parseFloat(s.outlineWidth) < 2) {
+        semIndicador.push(`${describe(activeHost())} (outline: ${s.outline})`);
       }
     }
     expect(semIndicador, semIndicador.join("\n")).toEqual([]);
@@ -177,6 +222,8 @@ grupo("alvos de toque", () => {
       <luck-tabs><luck-tab value="a" label="A"></luck-tab><luck-tab value="b" label="B"></luck-tab></luck-tabs>
       <luck-toast heading="Mensagem enviada" duration="0"></luck-toast>
       <luck-skill-list items='[{"title":"Front-end"}]'></luck-skill-list>
+      ${RAIL}
+      ${STAT}
     `);
     await wait(20);
     const targets: [string, Element][] = [
@@ -190,6 +237,10 @@ grupo("alvos de toque", () => {
       ["luck-tabs", part(root.querySelector("luck-tabs")!, "[role=tab]")],
       ["luck-toast ×", part(root.querySelector("luck-toast")!, "button.close")],
       ["luck-skill-list", part(root.querySelector("luck-skill-list")!, "button.head")],
+      ...Array.from(root.querySelector("luck-nav-rail")!.shadowRoot!.querySelectorAll("a.item")).map(
+        (a) => [`luck-nav-rail[${a.textContent}]`, a] as [string, Element],
+      ),
+      ["luck-stat", part(root.querySelector("luck-stat")!, "a.card")],
     ];
     const pequenos = targets
       .map(([name, el]) => [name, el.getBoundingClientRect()] as const)
@@ -232,6 +283,23 @@ grupo("layout", () => {
     await expect.poll(() => getComputedStyle(part(nav, ".links")).display).toBe("flex");
     expect(part(menu, "button").getAttribute("aria-expanded")).toBe("true");
   });
+
+  it("até 700 px o nav rail vira barra horizontal sem transbordar; stat, meter e mensagem refluem", async () => {
+    await page.viewport(320, 640);
+    const root = await mount(`
+      ${RAIL}
+      ${STAT}
+      <luck-meter label="Projetos com evidência" value="7" max="9" value-text="7 / 9"></luck-meter>
+      <luck-message from="assistant" author="Assistente"><p>Uma resposta longa o bastante para quebrar em várias linhas no celular.</p></luck-message>`);
+    await settle(root);
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(320);
+    const rail = root.querySelector("luck-nav-rail")!;
+    expect(getComputedStyle(part(rail, "nav")).flexDirection).toBe("row");
+    expect(getComputedStyle(part(rail, ".start")).display).toBe("none");
+
+    await page.viewport(1280, 800);
+    await expect.poll(() => getComputedStyle(part(rail, "nav")).flexDirection).toBe("column");
+  });
 });
 
 grupo("contraste e semântica (axe)", () => {
@@ -253,6 +321,18 @@ grupo("contraste e semântica (axe)", () => {
     <luck-timeline items='[{"title":"Tech Lead","company":"FCx Labs","period":"2022 — hoje"}]'></luck-timeline>
     <luck-skill-list items='[{"title":"Front-end","stack":"ANGULAR · STENCIL","summary":"Interfaces."}]'></luck-skill-list>
     <luck-logo variant="signature" size="40"></luck-logo>
+    ${RAIL}
+    ${STAT}
+    <luck-stat heading="Relatórios" icon="send" value="Em breve" caption="exportação em PDF" pending></luck-stat>
+    <luck-meter label="Projetos com evidência" value="7" max="9" value-text="7 / 9"></luck-meter>
+    <luck-meter label="Empresas" tone="company" value="11" max="13"></luck-meter>
+    <luck-meter label="Conhecimentos" tone="knowledge" value="36" max="43"></luck-meter>
+    <luck-meter label="Gasto" tone="neutral" value="3" max="10"></luck-meter>
+    <luck-meter label="Armazenamento" tone="danger" value="98"></luck-meter>
+    <div role="log" aria-label="Conversa">
+      <luck-message from="user" author="Você">Quais projetos usam Stencil?</luck-message>
+      <luck-message from="assistant" author="Assistente"><p>O Luck.</p><luck-tag slot="citations">Luck</luck-tag></luck-message>
+    </div>
   `;
 
   for (const theme of ["dark", "light"] as const) {
