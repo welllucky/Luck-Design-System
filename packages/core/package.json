@@ -1,6 +1,6 @@
 {
   "name": "@welllucky/luck-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web Components do design system WL3, escritos uma vez em Stencil e consumidos por qualquer framework.",
   "license": "UNLICENSED",
   "repository": {
